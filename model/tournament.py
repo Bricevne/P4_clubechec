@@ -20,7 +20,7 @@ class Tournament:
         self.place = place
         self.date = date
         self.number_of_turns = 4
-        self.rounds = ()
+        self.rounds = []
         self.players = {}
         self.time_control = time_control
         self.description = description
