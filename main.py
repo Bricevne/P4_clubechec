@@ -1,9 +1,12 @@
 """Main code."""
 
+from controller.menu import MenuManager
+
 
 def main():
     """Code managing the whole tournament process."""
-    print("Hello world")
+    menu_manager = MenuManager()
+    menu_manager.select_menu_option()
 
 
 if __name__ == "__main__":
