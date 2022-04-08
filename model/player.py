@@ -4,9 +4,7 @@
 class Player:
     """Class managing the players."""
 
-    def __init__(
-        self, name: str, surname: str, birthdate: str, gender: str, rank: int > 0
-    ):
+    def __init__(self, name: str, surname: str, birthdate: str, gender: str, rank: int):
         """Initialize player objects."""
         self.name = name
         self.surname = surname
