@@ -19,4 +19,7 @@ class MenuManager:
                 menu_option = int(input(self.display.get_menu()))
             except ValueError:
                 self.display.get_wrong_choice()
+            else:
+                if menu_option not in (1, 2, 3, 4):
+                    self.display.get_wrong_choice()
         return menu_option

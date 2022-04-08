@@ -9,17 +9,17 @@ def main():
     menu_manager = MenuManager()
     player_manager = PlayerManager()
 
-    software_on = True
-    while software_on is True:
+    running = True
+    while running is True:
         user_choice = menu_manager.select_menu_option()
         if user_choice == 1:
-            software_on = False
+            running = False
         elif user_choice == 2:
             added_player = player_manager.add_player()
         elif user_choice == 3:
-            software_on = False
+            running = False
         elif user_choice == 4:
-            software_on = False
+            running = False
 
 
 if __name__ == "__main__":
