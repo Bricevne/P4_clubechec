@@ -1,15 +1,15 @@
-"""Player manager class."""
+"""User manager class."""
 
-from model.player import Player
-from view.player import PlayerView
+from models.player import Player
+from views.user import UserView
 
 
-class PlayerManager:
-    """Class managing the addition of players."""
+class UserManager:
+    """Class managing."""
 
     def __init__(self):
         """Init."""
-        self.display = PlayerView()
+        self.display = UserView()
 
     def add_player(self):
         """Add a player."""

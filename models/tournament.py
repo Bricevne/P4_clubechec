@@ -15,7 +15,18 @@ class Tournament:
         time_control: str,
         description: str,
     ):
-        """Initialize tournament objects."""
+        """Initialize Tournament objects.
+
+        Args:
+            name (str): Tournament's name
+            place (str): Tournament's place
+            date (str): Tournament's date
+            number_of_turns (int): _description_
+            rounds (list): _description_
+            players (dict): _description_
+            time_control (str): _description_
+            description (str): _description_
+        """
         self.name = name
         self.place = place
         self.date = date

@@ -1,8 +1,8 @@
-"""Player view."""
+"""User view."""
 
 
-class PlayerView:
-    """Class managing players views."""
+class UserView:
+    """Class managing user views."""
 
     @staticmethod
     def get_name():

@@ -1,7 +1,7 @@
 """Menu manager class."""
 
 
-from view.menu import MenuView
+from views.menu import MenuView
 
 
 class MenuManager:

@@ -4,6 +4,6 @@
 class Match:
     """Class managing matchs."""
 
-    def __init__(self, pair: tuple(list)):
+    def __init__(self):
         """Initialize match objects."""
-        self.pair = ()
+        self.players_score = ()
