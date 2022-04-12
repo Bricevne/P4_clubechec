@@ -8,7 +8,7 @@ class MenuManager:
     """Class managing the starting menu."""
 
     def __init__(self):
-        """Init."""
+        """Class initializer."""
         self.display = MenuView()
 
     def select_menu_option(self):

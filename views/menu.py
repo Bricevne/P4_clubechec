@@ -4,8 +4,10 @@
 class MenuView:
     """Class managing menu displays."""
 
-    @staticmethod
-    def get_menu() -> str:
+    def __init__(self) -> None:
+        pass
+
+    def get_menu(self) -> str:
         """Display menu."""
         menu_options = "Welcome to the event! Please choose an option.\n\
         1. Create tournament\n\
@@ -14,8 +16,7 @@ class MenuView:
         4. Quit\n"
         return menu_options
 
-    @staticmethod
-    def get_wrong_choice():
+    def get_wrong_choice(self):
         """Display error message."""
         error_message = "Oops! That was no valid option. Try again."
         print(error_message)
