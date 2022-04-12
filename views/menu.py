@@ -5,6 +5,7 @@ class MenuView:
     """Class managing menu displays."""
 
     def __init__(self) -> None:
+        """Initialize class."""
         pass
 
     def get_menu(self) -> str:

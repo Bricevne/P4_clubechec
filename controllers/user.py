@@ -7,7 +7,7 @@ from views.user import UserView
 class UserManager:
     """Class managing."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init."""
         self.display = UserView()
 

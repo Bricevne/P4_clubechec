@@ -4,27 +4,26 @@
 class UserView:
     """Class managing user views."""
 
-    @staticmethod
-    def get_name():
+    def __init__(self) -> None:
+        """Initialize class."""
+        pass
+
+    def get_name(self) -> str:
         """Display name."""
         return "Name: "
 
-    @staticmethod
-    def get_surname():
+    def get_surname(self) -> str:
         """Display surname."""
         return "Surname: "
 
-    @staticmethod
-    def get_birthdate():
+    def get_birthdate(self) -> str:
         """Display birthdate."""
         return "Birthdate: "
 
-    @staticmethod
-    def get_gender():
+    def get_gender(self) -> str:
         """Display gender."""
         return "Gender: "
 
-    @staticmethod
-    def get_rank():
+    def get_rank(self) -> str:
         """Display rank."""
         return "Rank: "

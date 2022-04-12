@@ -17,13 +17,7 @@ def main():
     while running is True:
         user_choice = menu_manager.select_menu_option()
         if user_choice == 1:
-            tournament_manager = TournamentManager()
-            print(tournament_manager.tournament.name)
-            print(tournament_manager.tournament.place)
-            print(tournament_manager.tournament.date)
-            print(tournament_manager.tournament.time_control)
-            print(tournament_manager.tournament.description)
-
+            tournament_manager = TournamentManager(players)
         elif user_choice == 2:
             added_player = user_manager.add_player()
             players[player_counter] = added_player

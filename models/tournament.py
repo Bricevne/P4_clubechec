@@ -26,21 +26,26 @@ class Tournament:
         self.time_control = ""
         self.description = ""
 
-    def get_name(self, name):
+    def set_name(self, name: str):
+        """Set tournament's name."""
         unvalid_cities = ("Moscou", "Tokyo")
         if name not in unvalid_cities:
             self.name = name
 
-    def get_place(self, place):
+    def set_place(self, place: str):
+        """Set tournament's place."""
         self.place = place
 
-    def get_date(self, date):
+    def set_date(self, date: str):
+        """Set tournament's date."""
         self.date = date
 
-    def get_time_control(self, time_control):
+    def set_time_control(self, time_control: str):
+        """Set tournament's time control type."""
         unvalid_time_control = ("Blitz", "Bullet", "Coup rapide")
         if time_control in unvalid_time_control:
             self.time_control = time_control
 
-    def get_description(self, description):
+    def set_description(self, description: str):
+        """Set tournament's description."""
         self.description = description
