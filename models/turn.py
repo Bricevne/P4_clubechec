@@ -4,7 +4,7 @@
 class Turn:
     """Class managing turns."""
 
-    def __init__(self, name: str, start_time, end_time):
+    def __init__(self, name: str, start_time, end_time) -> None:
         """Initialize turn objects."""
         self.name = name
         self.match = []

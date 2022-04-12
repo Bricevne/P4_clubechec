@@ -17,7 +17,7 @@ class MenuView:
         4. Quit\n"
         return menu_options
 
-    def get_wrong_choice(self):
+    def get_wrong_choice(self) -> None:
         """Display error message."""
         error_message = "Oops! That was no valid option. Try again."
         print(error_message)

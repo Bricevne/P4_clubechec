@@ -11,7 +11,7 @@ class UserManager:
         """Init."""
         self.display = UserView()
 
-    def add_player(self):
+    def add_player(self) -> object:
         """Add a player."""
         name = input(self.display.get_name())
         surname = input(self.display.get_surname())
