@@ -1,7 +1,7 @@
 """Turn model."""
 
 
-class Turn:
+class Round:
     """Class managing turns."""
 
     def __init__(self, name: str, start_time, end_time) -> None:
