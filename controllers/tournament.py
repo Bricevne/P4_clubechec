@@ -16,14 +16,14 @@ class TournamentManager:
 
     def get_tournament_name(self) -> None:
         """Ask for the tournament's name."""
-        while not self.tournament.name:
-            name = input(self.tournament_view.get_view_name()).capitalize()
-            self.tournament.set_name(name)
+        name = input(self.tournament_view.get_view_name()).capitalize()
+        self.tournament.set_name(name)
 
     def get_tournament_place(self) -> None:
         """Ask for the tournament's place."""
-        place = input(self.tournament_view.get_view_place()).capitalize()
-        self.tournament.set_place(place)
+        while not self.tournament.place:
+            place = input(self.tournament_view.get_view_place()).capitalize()
+            self.tournament.set_place(place)
 
     def get_tournament_date(self) -> None:
         """Ask for the tournament's date."""
@@ -50,3 +50,25 @@ class TournamentManager:
         self.get_tournament_date()
         self.get_tournament_time_control()
         self.get_tournament_description()
+
+    def get_tournament_players(self) -> None:
+        """Get 8 players who will participate in the tournament."""
+        if len(self.available_players) < 8:
+            print(self.tournament_view.get_wrong_player_number())
+        else:
+            count = 0
+            selected_players = {}
+            while count < 8:
+                for id, player in self.available_players.items():
+                    if id not in selected_players.keys():
+                        print(f"{id} : {player.name} {player.surname}")
+                player_id = int(input(self.tournament_view.get_player()))
+                if (
+                    player_id not in selected_players.keys()
+                    and player_id in self.available_players.keys()
+                ):
+                    selected_players[player_id] = self.available_players[player_id]
+                    count += 1
+                else:
+                    print(self.tournament_view.get_wrong_id())
+            self.tournament.select_players(selected_players)

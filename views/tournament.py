@@ -9,21 +9,33 @@ class TournamentView:
         pass
 
     def get_view_name(self) -> str:
-        """Get name input."""
+        """Display name input."""
         return "Name: "
 
     def get_view_place(self) -> str:
-        """Get place input."""
+        """Display place input."""
         return "Place: "
 
     def get_view_date(self) -> str:
-        """Get date input."""
+        """Display date input."""
         return "Date: "
 
     def get_view_time_control(self) -> str:
-        """Get time control input."""
+        """Display time control input."""
         return "Time_control: "
 
     def get_view_description(self) -> str:
-        """Get description input."""
+        """Display description input."""
         return "Description: "
+
+    def get_wrong_player_number(self) -> str:
+        """Display a message when not enough players are available for the tournament."""
+        return "You need at least 8 players to choose from for a tournament."
+
+    def get_player(self) -> str:
+        """Display a message for selecting a player."""
+        return "Please select a player's id to add him to the tournament : "
+
+    def get_wrong_id(self) -> str:
+        """Display a message when a player is already selected or does not exist."""
+        return "Please choose a valid id from the list. "

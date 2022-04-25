@@ -18,6 +18,8 @@ def main():
         user_choice = menu_manager.select_menu_option()
         if user_choice == 1:
             tournament_manager = TournamentManager(players)
+            tournament_manager.get_tournament_players()
+            print(tournament_manager.tournament.players)
         elif user_choice == 2:
             added_player = user_manager.add_player()
             players[player_counter] = added_player

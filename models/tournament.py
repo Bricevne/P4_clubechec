@@ -28,13 +28,13 @@ class Tournament:
 
     def set_name(self, name: str) -> None:
         """Set tournament's name."""
-        unvalid_cities = ("Moscou", "Tokyo")
-        if name not in unvalid_cities:
-            self.name = name
+        self.name = name
 
     def set_place(self, place: str) -> None:
         """Set tournament's place."""
-        self.place = place
+        unvalid_cities = ("Moscou", "Tokyo")
+        if place not in unvalid_cities:
+            self.place = place
 
     def set_date(self, date: str) -> None:
         """Set tournament's date."""
@@ -49,3 +49,7 @@ class Tournament:
     def set_description(self, description: str) -> None:
         """Set tournament's description."""
         self.description = description
+
+    def select_players(self, players: dict) -> None:
+        """Ask for the tournament's players."""
+        self.players = players
