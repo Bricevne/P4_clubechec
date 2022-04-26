@@ -51,6 +51,19 @@ class TournamentManager:
         self.get_tournament_time_control()
         self.get_tournament_description()
 
+    def select_tournament_option(self) -> int:
+        """Ask for User choice."""
+        menu_option = 0
+        while menu_option not in (1, 2, 3, 4, 5):
+            try:
+                menu_option = int(input(self.tournament_view.get_tournament_options()))
+            except ValueError:
+                self.tournament_view.get_wrong_option()
+            else:
+                if menu_option not in (1, 2, 3, 4, 5):
+                    self.tournament_view.get_wrong_option()
+        return menu_option
+
     def get_tournament_players(self) -> None:
         """Get 8 players who will participate in the tournament."""
         if len(self.available_players) < 8:
@@ -72,3 +85,12 @@ class TournamentManager:
                 else:
                     print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
+
+    def get_round(self) -> None:
+        """Ask for the tournament's number of rounds."""
+        try:
+            rounds = int(input(self.tournament_view.get_view_round()))
+        except ValueError:
+            self.tournament_view.get_wrong_option()
+        else:
+            self.tournament.set_round(rounds)

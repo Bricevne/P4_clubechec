@@ -53,3 +53,7 @@ class Tournament:
     def select_players(self, players: dict) -> None:
         """Ask for the tournament's players."""
         self.players = players
+
+    def set_round(self, rounds: int) -> None:
+        """Set tournament's description."""
+        self.rounds = rounds

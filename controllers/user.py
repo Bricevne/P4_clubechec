@@ -20,3 +20,11 @@ class UserManager:
         rank = int(input(self.display.get_rank()))
         player = Player(name, surname, birthdate, gender, rank)
         return player
+
+    def write_report(self) -> None:
+        """Export a written report."""
+        pass
+
+    def save_tournament(self) -> None:
+        """Save the current state of the tournament."""
+        pass
