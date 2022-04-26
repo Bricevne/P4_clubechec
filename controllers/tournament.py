@@ -2,6 +2,7 @@
 
 from models.tournament import Tournament
 from views.tournament import TournamentView
+from models.round import Round
 
 
 class TournamentManager:
@@ -64,6 +65,32 @@ class TournamentManager:
                     self.tournament_view.get_wrong_option()
         return menu_option
 
+    def select_round_option(self) -> int:
+        """Ask for User choice."""
+        menu_option = 0
+        while menu_option not in (1, 2, 3, 4):
+            try:
+                menu_option = int(input(self.tournament_view.get_round_options()))
+            except ValueError:
+                self.tournament_view.get_wrong_option()
+            else:
+                if menu_option not in (1, 2, 3, 4):
+                    self.tournament_view.get_wrong_option()
+        return menu_option
+
+    def select_match_option(self) -> int:
+        """Ask for User choice."""
+        menu_option = 0
+        while menu_option not in (1, 2, 3, 4):
+            try:
+                menu_option = int(input(self.tournament_view.get_match_options()))
+            except ValueError:
+                self.tournament_view.get_wrong_option()
+            else:
+                if menu_option not in (1, 2, 3, 4):
+                    self.tournament_view.get_wrong_option()
+        return menu_option
+
     def get_tournament_players(self) -> None:
         """Get 8 players who will participate in the tournament."""
         if len(self.available_players) < 8:
@@ -89,8 +116,27 @@ class TournamentManager:
     def get_round(self) -> None:
         """Ask for the tournament's number of rounds."""
         try:
-            rounds = int(input(self.tournament_view.get_view_round()))
+            number_of_rounds = int(input(self.tournament_view.get_view_round()))
         except ValueError:
             self.tournament_view.get_wrong_option()
         else:
-            self.tournament.set_round(rounds)
+            self.tournament.set_round(number_of_rounds)
+
+    def get_round_name(self, round_object) -> None:
+        """Ask for the new round's name.
+
+        Args:
+            round_object (object): object from the round's model
+        """
+        name = input(self.tournament_view.get_view_round_name())
+        round_object.set_round_name(name)
+
+    def start_new_round(self) -> None:
+        """Start a new round."""
+        new_round = Round()
+        new_round.set_starting_time()
+        self.get_round_name(new_round)
+
+        # player_pairs = self.tournament.generate_pairs()
+
+        new_round.set_ending_time()

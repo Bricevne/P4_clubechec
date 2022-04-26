@@ -20,8 +20,8 @@ class Tournament:
         self.name = ""
         self.place = ""
         self.date = ""
-        self.number_of_turns = 4
-        self.rounds = []
+        self.number_of_rounds = 4
+        self.rounds = ["Z"]
         self.players = {}
         self.time_control = ""
         self.description = ""
@@ -54,6 +54,27 @@ class Tournament:
         """Ask for the tournament's players."""
         self.players = players
 
-    def set_round(self, rounds: int) -> None:
+    def set_round(self, number_of_rounds: int) -> None:
         """Set tournament's description."""
-        self.rounds = rounds
+        self.number_of_rounds = number_of_rounds
+
+    def add_round(self, rounds: int) -> None:
+        """Set tournament's description."""
+        self.rounds.append(rounds)
+
+    def generate_pairs(self) -> None:
+        """Generate player pairs.
+
+        round_list is the list of rounds in the tournament model.
+        """
+        if len(self.rounds) == 1:
+            sorted_players = sorted(self.players.items(), key=lambda x: x[1].rank)
+            middle = len(sorted_players) // 2
+            matchs = []
+            for match in range(middle):
+                new_match = (sorted_players[match], sorted_players[middle])
+                matchs.append(new_match)
+                middle += 1
+            return matchs
+        else:
+            pass
