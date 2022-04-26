@@ -12,4 +12,5 @@ class Player:
         self.surname = surname
         self.birthdate = birthdate
         self.gender = gender
+        self.score = 0
         self.rank = rank

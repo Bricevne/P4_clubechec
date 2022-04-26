@@ -72,16 +72,14 @@ class TournamentView:
         4. Quit\n"
         return menu_options
 
-    def get_following_matchs(
-        self, first_match, second_match, third_match, fourth_match
-    ) -> str:
+    def display_following_matchs(self, player_list: tuple) -> None:
         """Display round menu."""
         round_matchs = f"\n\
-        Match 1 : {first_match}\n\
-        Match 2 : {second_match}\n\
-        Match 3 : {third_match}\n\
-        Match 4 : {fourth_match}\n"
-        return round_matchs
+        Match 1 : {player_list[0]}  -  {player_list[1]}\n\
+        Match 2 : {player_list[2]}  -  {player_list[3]}\n\
+        Match 3 : {player_list[4]}  -  {player_list[5]}\n\
+        Match 4 : {player_list[6]}  -  {player_list[7]}"
+        print(round_matchs)
 
     def get_wrong_option(self) -> None:
         """Display error message."""

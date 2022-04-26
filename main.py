@@ -33,7 +33,7 @@ def main():
                         len(tournament_manager.tournament.rounds)
                         < tournament_manager.tournament.number_of_rounds
                     ) and round_running:
-                        # faire des options
+
                         round_option = tournament_manager.select_round_option()
                         if round_option == 1:
                             tournament_manager.start_new_round()
@@ -52,6 +52,11 @@ def main():
                                     round_running = False
                                     tournament_running = False
                                     running = False
+                            if (
+                                len(tournament_manager.tournament.rounds)
+                                == tournament_manager.tournament.number_of_rounds
+                            ):
+                                tournament_manager.end_round()
 
                         elif round_option == 2:
                             pass
@@ -66,7 +71,6 @@ def main():
                     pass
                 elif tournament_option == 5:
                     tournament_running = False
-                    running = False
 
         elif user_choice == 2:
             added_player = user_manager.add_player()

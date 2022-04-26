@@ -3,6 +3,7 @@
 from models.tournament import Tournament
 from views.tournament import TournamentView
 from models.round import Round
+from random import randint
 
 
 class TournamentManager:
@@ -131,12 +132,45 @@ class TournamentManager:
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
 
+    def get_players_round_list(self, matchs) -> tuple:
+        """Get players names and surnames for displays."""
+        first_player = matchs[0][0][1].name + " " + matchs[0][0][1].surname
+        second_player = matchs[0][1][1].name + " " + matchs[0][1][1].surname
+        third_player = matchs[1][0][1].name + " " + matchs[1][0][1].surname
+        fourth_player = matchs[1][1][1].name + " " + matchs[1][1][1].surname
+        fifth_player = matchs[2][0][1].name + " " + matchs[2][0][1].surname
+        sixth_player = matchs[2][1][1].name + " " + matchs[2][1][1].surname
+        seventh_player = matchs[3][0][1].name + " " + matchs[3][0][1].surname
+        eighth_player = matchs[3][1][1].name + " " + matchs[3][1][1].surname
+        return (
+            first_player,
+            second_player,
+            third_player,
+            fourth_player,
+            fifth_player,
+            sixth_player,
+            seventh_player,
+            eighth_player,
+        )
+
+    def get_matchs_list(self, players):
+        """Get matchs displays."""
+        return self.tournament_view.display_following_matchs(
+            self.get_players_round_list(players)
+        )
+
     def start_new_round(self) -> None:
         """Start a new round."""
         new_round = Round()
         new_round.set_starting_time()
         self.get_round_name(new_round)
 
-        # player_pairs = self.tournament.generate_pairs()
+        player_pairs = self.tournament.generate_pairs()
+        self.get_matchs_list(player_pairs)
 
-        new_round.set_ending_time()
+    def end_round(self, round: object) -> None:
+        """End a round by setting the ending time."""
+        round.set_ending_time()
+
+    def start_new_match(self) -> None:
+        """Start a new round."""

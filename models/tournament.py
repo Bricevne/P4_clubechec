@@ -21,7 +21,7 @@ class Tournament:
         self.place = ""
         self.date = ""
         self.number_of_rounds = 4
-        self.rounds = ["Z"]
+        self.rounds = []
         self.players = {}
         self.time_control = ""
         self.description = ""
@@ -58,7 +58,7 @@ class Tournament:
         """Set tournament's description."""
         self.number_of_rounds = number_of_rounds
 
-    def add_round(self, rounds: int) -> None:
+    def add_round(self, rounds: object) -> None:
         """Set tournament's description."""
         self.rounds.append(rounds)
 
@@ -67,9 +67,12 @@ class Tournament:
 
         round_list is the list of rounds in the tournament model.
         """
-        if len(self.rounds) == 1:
+        if len(self.rounds) == 0:
             sorted_players = sorted(self.players.items(), key=lambda x: x[1].rank)
+            sorted_players_dict = dict((key, value) for (key, value) in sorted_players)
+            print(sorted_players_dict)
             middle = len(sorted_players) // 2
+
             matchs = []
             for match in range(middle):
                 new_match = (sorted_players[match], sorted_players[middle])
