@@ -62,15 +62,6 @@ class TournamentView:
         4. Quit\n"
         return menu_options
 
-    def get_match_options(self) -> str:
-        """Display round menu."""
-        menu_options = "\n\
-        1. Next Match\n\
-        2. Update rankings\n\
-        3. Save data\n\
-        4. Quit\n"
-        return menu_options
-
     def get_wrong_option(self) -> None:
         """Display error message."""
         error_message = "Oops! That was no valid option. Try again."
@@ -84,3 +75,13 @@ class TournamentView:
     def get_view_round_name(self) -> str:
         """Display round name."""
         return "Round name: "
+
+    def get_view_match(self, match_counter: int) -> None:
+        """Display match result."""
+        message = f"Match {match_counter} | results\n"
+        print(message)
+
+    def get_wrong_score_type(self) -> None:
+        """Display."""
+        message = "You have to give a score (Lose : 0, Win : 1, Draw : 0.5)"
+        print(message)

@@ -14,6 +14,19 @@ class TournamentManager:
         self.tournament_view = TournamentView()
         self.available_players = available_players
 
+    def dash(n):
+        def decorate(fn):
+            def wrapper(*args, **kwargs):
+                print(n * "-")
+                result = fn(*args, **kwargs)
+                print(result)
+                print(n * "-")
+                return result
+
+            return wrapper
+
+        return decorate
+
     def get_tournament_name(self) -> None:
         """Ask for the tournament's name."""
         name = input(self.tournament_view.get_view_name()).capitalize()
@@ -107,7 +120,7 @@ class TournamentManager:
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
 
-    def get_players_round_list(self, matches) -> tuple:
+    def get_players_matches(self, matches) -> tuple:
         """Display round matches."""
         match_counter = 1
         for match in matches:
@@ -123,10 +136,46 @@ class TournamentManager:
         self.get_round_name(new_round)
 
         player_pairs = self.tournament.generate_pairs()
-        self.get_players_round_list(player_pairs)
+        self.get_players_matches(player_pairs)
+
+        match_number = 0
+        while match_number < len(player_pairs):
+            first_player = (
+                player_pairs[match_number][0].name
+                + " "
+                + player_pairs[match_number][0].surname
+                + " : "
+            )
+            second_player = (
+                player_pairs[match_number][1].name
+                + " "
+                + player_pairs[match_number][1].surname
+                + " : "
+            )
+            self.start_new_match(match_number, first_player, second_player)
+            match_number += 1
 
         new_round.set_ending_time()
-        return new_round
+        # new_round.add_match()
+        self.tournament.add_round(new_round)
 
-    def start_new_match(self) -> None:
+    @dash(40)
+    def start_new_match(self, match_number, first_player, second_player) -> None:
         """Start a new round."""
+        match_number += 1
+        self.tournament_view.get_view_match(match_number)
+        first_player_result = self.get_result(first_player)
+        second_player_result = self.get_result(second_player)
+
+    def get_result(self, player):
+        """Ask for the user's input for players' scores."""
+        player_result = -1
+        while player_result not in (0, 0.5, 1):
+            try:
+                player_result = float(input(player))
+            except ValueError:
+                self.tournament_view.get_wrong_score_type()
+            else:
+                if player_result not in (0, 0.5, 1):
+                    self.tournament_view.get_wrong_score_type()
+        return player_result

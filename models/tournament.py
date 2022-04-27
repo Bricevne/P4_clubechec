@@ -58,9 +58,9 @@ class Tournament:
         """Set tournament's description."""
         self.number_of_rounds = number_of_rounds
 
-    def add_round(self, rounds: object) -> None:
+    def add_round(self, round: object) -> None:
         """Set tournament's description."""
-        self.rounds.append(rounds)
+        self.rounds.append(round)
 
     def generate_pairs(self) -> None:
         """Generate player pairs.

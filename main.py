@@ -9,6 +9,7 @@ from models.player import Player
 
 
 def players_test():
+    """Test function."""
     player = {}
     counter = 1
     brice = Player("Brice", "Venayre", "", "M", 1)
@@ -31,16 +32,19 @@ def main():
     user_manager = UserManager()
 
     players = {}
-    player_counter = len(players) + 1
+
+    # player_counter = len(players) + 1
+    player_counter = 9
+
+    # FOR TEST ONLY
+    players = players_test()
+    # FOR TEST ONLY
 
     running = True
     while running:
         user_choice = menu_manager.select_menu_option()
-        if user_choice == 1:
 
-            # FOR TEST ONLY
-            players = players_test()
-            # FOR TEST ONLY
+        if user_choice == 1:
 
             tournament_manager = TournamentManager(players)
 
@@ -70,25 +74,7 @@ def main():
                         )
                         if round_option == 1:
                             new_round = tournament_manager.start_new_round()
-                            tournament_manager.tournament.rounds.append(new_round)
-
-                            match_running = True
-                            while match_running:
-                                match_option = tournament_manager.select_option(
-                                    range(1, 5),
-                                    tournament_manager.tournament_view.get_match_options,
-                                )
-                                if match_option == 1:
-                                    tournament_manager.start_new_match()
-                                elif match_option == 2:
-                                    pass
-                                elif match_option == 3:
-                                    pass
-                                elif match_option == 4:
-                                    match_running = False
-                                    round_running = False
-                                    tournament_running = False
-                                    running = False
+                            tournament_manager.tournament.add_round(new_round)
 
                         elif round_option == 2:
                             pass

@@ -6,4 +6,4 @@ class Match:
 
     def __init__(self) -> None:
         """Initialize match objects."""
-        self.players_score = ()
+        self.players_score = None
