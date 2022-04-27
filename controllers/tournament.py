@@ -3,7 +3,6 @@
 from models.tournament import Tournament
 from views.tournament import TournamentView
 from models.round import Round
-from random import randint
 
 
 class TournamentManager:
@@ -13,7 +12,6 @@ class TournamentManager:
         """Initialize class."""
         self.tournament = Tournament()
         self.tournament_view = TournamentView()
-        self.get_tournament_information()
         self.available_players = available_players
 
     def get_tournament_name(self) -> None:
@@ -53,53 +51,29 @@ class TournamentManager:
         self.get_tournament_time_control()
         self.get_tournament_description()
 
-    def select_tournament_option(self) -> int:
-        """Ask for User choice."""
-        menu_option = 0
-        while menu_option not in (1, 2, 3, 4, 5):
+    def select_option(self, number_of_options: tuple, get_view_options):
+        """Ask for the available options."""
+        option = 0
+        while option not in number_of_options:
             try:
-                menu_option = int(input(self.tournament_view.get_tournament_options()))
+                option = int(input(get_view_options()))
             except ValueError:
                 self.tournament_view.get_wrong_option()
             else:
-                if menu_option not in (1, 2, 3, 4, 5):
+                if option not in number_of_options:
                     self.tournament_view.get_wrong_option()
-        return menu_option
+        return option
 
-    def select_round_option(self) -> int:
-        """Ask for User choice."""
-        menu_option = 0
-        while menu_option not in (1, 2, 3, 4):
-            try:
-                menu_option = int(input(self.tournament_view.get_round_options()))
-            except ValueError:
-                self.tournament_view.get_wrong_option()
-            else:
-                if menu_option not in (1, 2, 3, 4):
-                    self.tournament_view.get_wrong_option()
-        return menu_option
-
-    def select_match_option(self) -> int:
-        """Ask for User choice."""
-        menu_option = 0
-        while menu_option not in (1, 2, 3, 4):
-            try:
-                menu_option = int(input(self.tournament_view.get_match_options()))
-            except ValueError:
-                self.tournament_view.get_wrong_option()
-            else:
-                if menu_option not in (1, 2, 3, 4):
-                    self.tournament_view.get_wrong_option()
-        return menu_option
-
-    def get_tournament_players(self) -> None:
+    def get_tournament_players(self) -> bool:
         """Get 8 players who will participate in the tournament."""
         if len(self.available_players) < 8:
-            print(self.tournament_view.get_wrong_player_number())
+            self.tournament_view.get_wrong_player_number()
+            return False
         else:
-            count = 0
+            self.get_tournament_information()
+            counter = 0
             selected_players = {}
-            while count < 8:
+            while counter < 8:
                 for id, player in self.available_players.items():
                     if id not in selected_players.keys():
                         print(f"{id} : {player.name} {player.surname}")
@@ -109,10 +83,11 @@ class TournamentManager:
                     and player_id in self.available_players.keys()
                 ):
                     selected_players[player_id] = self.available_players[player_id]
-                    count += 1
+                    counter += 1
                 else:
                     print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
+            return True
 
     def get_round(self) -> None:
         """Ask for the tournament's number of rounds."""
@@ -132,32 +107,14 @@ class TournamentManager:
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
 
-    def get_players_round_list(self, matchs) -> tuple:
-        """Get players names and surnames for displays."""
-        first_player = matchs[0][0][1].name + " " + matchs[0][0][1].surname
-        second_player = matchs[0][1][1].name + " " + matchs[0][1][1].surname
-        third_player = matchs[1][0][1].name + " " + matchs[1][0][1].surname
-        fourth_player = matchs[1][1][1].name + " " + matchs[1][1][1].surname
-        fifth_player = matchs[2][0][1].name + " " + matchs[2][0][1].surname
-        sixth_player = matchs[2][1][1].name + " " + matchs[2][1][1].surname
-        seventh_player = matchs[3][0][1].name + " " + matchs[3][0][1].surname
-        eighth_player = matchs[3][1][1].name + " " + matchs[3][1][1].surname
-        return (
-            first_player,
-            second_player,
-            third_player,
-            fourth_player,
-            fifth_player,
-            sixth_player,
-            seventh_player,
-            eighth_player,
-        )
-
-    def get_matchs_list(self, players):
-        """Get matchs displays."""
-        return self.tournament_view.display_following_matchs(
-            self.get_players_round_list(players)
-        )
+    def get_players_round_list(self, matches) -> tuple:
+        """Display round matches."""
+        match_counter = 1
+        for match in matches:
+            first_player = match[0].name + " " + match[0].surname
+            second_player = match[1].name + " " + match[1].surname
+            print(f"Match {match_counter} : {first_player}  -  {second_player}")
+            match_counter += 1
 
     def start_new_round(self) -> None:
         """Start a new round."""
@@ -166,11 +123,10 @@ class TournamentManager:
         self.get_round_name(new_round)
 
         player_pairs = self.tournament.generate_pairs()
-        self.get_matchs_list(player_pairs)
+        self.get_players_round_list(player_pairs)
 
-    def end_round(self, round: object) -> None:
-        """End a round by setting the ending time."""
-        round.set_ending_time()
+        new_round.set_ending_time()
+        return new_round
 
     def start_new_match(self) -> None:
         """Start a new round."""

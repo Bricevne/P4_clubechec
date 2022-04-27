@@ -68,16 +68,21 @@ class Tournament:
         round_list is the list of rounds in the tournament model.
         """
         if len(self.rounds) == 0:
-            sorted_players = sorted(self.players.items(), key=lambda x: x[1].rank)
-            sorted_players_dict = dict((key, value) for (key, value) in sorted_players)
-            print(sorted_players_dict)
-            middle = len(sorted_players) // 2
+            sorted_players = dict(
+                (key, value)
+                for (key, value) in sorted(
+                    self.players.items(), key=lambda x: x[1].rank
+                )
+            )
 
-            matchs = []
-            for match in range(middle):
-                new_match = (sorted_players[match], sorted_players[middle])
-                matchs.append(new_match)
-                middle += 1
-            return matchs
+            id_players = [id for id in sorted_players.keys()]
+            matches = []
+            for number in range(0, len(id_players) // 2):
+                new_match = (
+                    sorted_players[id_players[number]],
+                    sorted_players[id_players[number + len(id_players) // 2]],
+                )
+                matches.append(new_match)
+            return matches
         else:
             pass
