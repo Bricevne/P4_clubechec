@@ -73,8 +73,7 @@ def main():
                             tournament_manager.tournament_view.get_round_options,
                         )
                         if round_option == 1:
-                            new_round = tournament_manager.start_new_round()
-                            tournament_manager.tournament.add_round(new_round)
+                            tournament_manager.start_new_round()
 
                         elif round_option == 2:
                             pass

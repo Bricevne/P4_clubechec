@@ -3,6 +3,7 @@
 from models.tournament import Tournament
 from views.tournament import TournamentView
 from models.round import Round
+from models.match import Match
 
 
 class TournamentManager:
@@ -14,12 +15,14 @@ class TournamentManager:
         self.tournament_view = TournamentView()
         self.available_players = available_players
 
+    @staticmethod
     def dash(n):
+        """Class decorator."""
+
         def decorate(fn):
             def wrapper(*args, **kwargs):
                 print(n * "-")
                 result = fn(*args, **kwargs)
-                print(result)
                 print(n * "-")
                 return result
 
@@ -121,7 +124,7 @@ class TournamentManager:
         round_object.set_round_name(name)
 
     def get_players_matches(self, matches) -> tuple:
-        """Display round matches."""
+        """Display all the matches that will occur during the round."""
         match_counter = 1
         for match in matches:
             first_player = match[0].name + " " + match[0].surname
@@ -152,20 +155,31 @@ class TournamentManager:
                 + player_pairs[match_number][1].surname
                 + " : "
             )
-            self.start_new_match(match_number, first_player, second_player)
+            results = self.start_new_match(match_number, first_player, second_player)
+            match_result = Match(
+                self.get_match_object_format(
+                    player_pairs[match_number][0],
+                    player_pairs[match_number][1],
+                    results,
+                )
+            )
+            new_round.add_match(match_result)
+            # print(match_result.players_score)
             match_number += 1
 
         new_round.set_ending_time()
-        # new_round.add_match()
         self.tournament.add_round(new_round)
+        # print(new_round.match)
+        # print(self.tournament.rounds)
 
     @dash(40)
     def start_new_match(self, match_number, first_player, second_player) -> None:
-        """Start a new round."""
+        """Start a new match."""
         match_number += 1
         self.tournament_view.get_view_match(match_number)
         first_player_result = self.get_result(first_player)
         second_player_result = self.get_result(second_player)
+        return (first_player_result, second_player_result)
 
     def get_result(self, player):
         """Ask for the user's input for players' scores."""
@@ -179,3 +193,8 @@ class TournamentManager:
                 if player_result not in (0, 0.5, 1):
                     self.tournament_view.get_wrong_score_type()
         return player_result
+
+    def get_match_object_format(self, first_player, second_player, result: tuple):
+        """Put the results in a tuple containing two lists [player, score]."""
+        match = ([first_player, result[0]], [second_player, result[1]])
+        return match
