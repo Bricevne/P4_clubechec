@@ -127,8 +127,8 @@ class TournamentManager:
         """Display all the matches that will occur during the round."""
         match_counter = 1
         for match in matches:
-            first_player = match[0].name + " " + match[0].surname
-            second_player = match[1].name + " " + match[1].surname
+            first_player = match[0][1].name + " " + match[0][1].surname
+            second_player = match[1][1].name + " " + match[1][1].surname
             print(f"Match {match_counter} : {first_player}  -  {second_player}")
             match_counter += 1
 
@@ -143,26 +143,34 @@ class TournamentManager:
 
         match_number = 0
         while match_number < len(player_pairs):
+            first_player_id = player_pairs[match_number][0][0]
             first_player = (
-                player_pairs[match_number][0].name
+                player_pairs[match_number][0][1].name
                 + " "
-                + player_pairs[match_number][0].surname
+                + player_pairs[match_number][0][1].surname
                 + " : "
             )
+            second_player_id = player_pairs[match_number][1][0]
             second_player = (
-                player_pairs[match_number][1].name
+                player_pairs[match_number][1][1].name
                 + " "
-                + player_pairs[match_number][1].surname
+                + player_pairs[match_number][1][1].surname
                 + " : "
             )
             results = self.start_new_match(match_number, first_player, second_player)
             match_result = Match(
                 self.get_match_object_format(
-                    player_pairs[match_number][0],
-                    player_pairs[match_number][1],
+                    first_player_id,
+                    second_player_id,
                     results,
                 )
             )
+            self.get_new_total_scores(match_result)
+
+            print(self.tournament.players)
+            for v in self.tournament.players.values():
+                print(v.total_score)
+
             new_round.add_match(match_result)
             # print(match_result.players_score)
             match_number += 1
@@ -194,7 +202,16 @@ class TournamentManager:
                     self.tournament_view.get_wrong_score_type()
         return player_result
 
-    def get_match_object_format(self, first_player, second_player, result: tuple):
+    def get_match_object_format(self, first_player_id, second_player_id, result: tuple):
         """Put the results in a tuple containing two lists [player, score]."""
-        match = ([first_player, result[0]], [second_player, result[1]])
+        match = ([first_player_id, result[0]], [second_player_id, result[1]])
         return match
+
+    def get_new_total_scores(self, match: object) -> None:
+        """_summary_."""
+        self.tournament.players[match.players_score[0][0]].update_score(
+            match.players_score[0][1]
+        )
+        self.tournament.players[match.players_score[1][0]].update_score(
+            match.players_score[1][1]
+        )
