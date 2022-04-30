@@ -85,3 +85,7 @@ class TournamentView:
         """Display."""
         message = "You have to give a score (Lose : 0, Win : 1, Draw : 0.5)"
         print(message)
+
+    def display_rank(self, player):
+        message = f"{player.rank} : {player.name} {player.surname} - Total score : {player.total_score}"
+        print(message)

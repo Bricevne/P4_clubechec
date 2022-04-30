@@ -68,7 +68,7 @@ class Tournament:
         round_list is the list of rounds in the tournament model.
         """
         if len(self.rounds) == 0:
-            sorted_players = sorted(self.players.items(), key=lambda x: x[1].rank)
+            sorted_players = self.sort_by_rank()
 
             matches = []
             for number in range(0, len(sorted_players) // 2):
@@ -79,9 +79,7 @@ class Tournament:
                 matches.append(new_match)
             return matches
         else:
-            sorted_players = sorted(
-                self.players.items(), key=lambda x: x[1].total_score, reverse=True
-            )
+            sorted_players = self.sort_by_score_list()
 
             matches = []
             for number in range(0, len(sorted_players) // 2):
@@ -91,3 +89,33 @@ class Tournament:
                 )
                 matches.append(new_match)
             return matches
+
+    def sort_by_rank(self) -> list:
+        """Sort players objects by rank."""
+        return sorted(self.players.items(), key=lambda x: x[1].rank)
+
+    def sort_by_score_list(self) -> list:
+        """Sort players objects by decreasing total score.
+        Output in list format."""
+        return sorted(
+            self.players.items(), key=lambda x: x[1].total_score, reverse=True
+        )
+
+    def sort_by_score_dict(self) -> None:
+        """Sort players objects by decreasing total score.
+        Output in dict format."""
+        sorted_players = {
+            k: v
+            for k, v in sorted(
+                self.players.items(), key=lambda item: item[1].total_score, reverse=True
+            )
+        }
+        return sorted_players
+
+    def sort_by_rank_dict(self) -> None:
+        """Sort players objects by decreasing total score.
+        Output in dict format."""
+        sorted_players = {
+            k: v for k, v in sorted(self.players.items(), key=lambda item: item[1].rank)
+        }
+        return sorted_players

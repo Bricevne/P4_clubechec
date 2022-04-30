@@ -215,3 +215,17 @@ class TournamentManager:
         self.tournament.players[match.players_score[1][0]].update_score(
             match.players_score[1][1]
         )
+
+    def update_ranking(self):
+        """Update the general ranking based on ranks."""
+        sorted_players = self.tournament.sort_by_score_dict()
+        rank_counter = 1
+        for value in sorted_players.values():
+            value.update_rank(rank_counter)
+            rank_counter += 1
+
+    def display_by_rank(self):
+        """"""
+        sorted_players = self.tournament.sort_by_rank_dict()
+        for v in sorted_players.values():
+            self.tournament_view.display_rank(v)

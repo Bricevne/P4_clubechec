@@ -76,7 +76,8 @@ def main():
                             tournament_manager.start_new_round()
 
                         elif round_option == 2:
-                            pass
+                            tournament_manager.update_ranking()
+                            tournament_manager.display_by_rank()
                         elif round_option == 3:
                             pass
                         elif round_option == 4:
