@@ -167,7 +167,7 @@ class TournamentManager:
             )
             self.get_new_total_scores(match_result)
 
-            print(self.tournament.players)
+            # print(self.tournament.players)
             for v in self.tournament.players.values():
                 print(v.total_score)
 
@@ -220,12 +220,40 @@ class TournamentManager:
         """Update the general ranking based on ranks."""
         sorted_players = self.tournament.sort_by_score_dict()
         rank_counter = 1
-        for value in sorted_players.values():
-            value.update_rank(rank_counter)
+        for player in sorted_players.values():
+            player.update_rank(rank_counter)
             rank_counter += 1
 
     def display_by_rank(self):
-        """"""
+        """Display the players by rank."""
+        self.update_ranking()
         sorted_players = self.tournament.sort_by_rank_dict()
-        for v in sorted_players.values():
-            self.tournament_view.display_rank(v)
+        for player in sorted_players.values():
+            self.tournament_view.display_rank(player)
+
+    def start_tournament(self):
+        """Start tournament."""
+        round_running = True
+        while (
+            len(self.tournament.rounds) < self.tournament.number_of_rounds
+            and round_running
+        ):
+
+            round_option = self.select_option(
+                range(1, 5),
+                self.tournament_view.get_round_options,
+            )
+            if round_option == 1:
+                self.start_new_round()
+
+            elif round_option == 2:
+                self.display_by_rank()
+            elif round_option == 3:
+                pass
+            elif round_option == 4:
+                round_running = False
+                return False
+
+        self.tournament_view.display_message_end_tournament()
+        self.display_by_rank()
+        return True

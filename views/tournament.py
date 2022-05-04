@@ -87,5 +87,11 @@ class TournamentView:
         print(message)
 
     def display_rank(self, player):
+        """Display the message format for rankings."""
         message = f"{player.rank} : {player.name} {player.surname} - Total score : {player.total_score}"
+        print(message)
+
+    def display_message_end_tournament(self) -> None:
+        """Diaplsy."""
+        message = "The tournament ends ! The final ranking is: "
         print(message)

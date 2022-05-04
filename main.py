@@ -8,6 +8,7 @@ from controllers.tournament import TournamentManager
 from models.player import Player
 
 
+# FOR TEST ONLY
 def players_test():
     """Test function."""
     player = {}
@@ -26,6 +27,9 @@ def players_test():
     return player
 
 
+# FOR TEST ONLY
+
+
 def main():
     """Code managing the whole tournament process."""
     menu_manager = MenuManager()
@@ -40,8 +44,10 @@ def main():
     players = players_test()
     # FOR TEST ONLY
 
+    # start new tournament,
     running = True
     while running:
+
         user_choice = menu_manager.select_menu_option()
 
         if user_choice == 1:
@@ -49,6 +55,7 @@ def main():
             tournament_manager = TournamentManager(players)
 
             enough_players = tournament_manager.get_tournament_players()
+
             tournament_running = True
             if not enough_players:
                 tournament_running = False
@@ -62,28 +69,14 @@ def main():
                     tournament_manager.get_round()
                 elif tournament_option == 2:
 
-                    round_running = True
-                    while (
-                        len(tournament_manager.tournament.rounds)
-                        < tournament_manager.tournament.number_of_rounds
-                    ) and round_running:
-
-                        round_option = tournament_manager.select_option(
-                            range(1, 5),
-                            tournament_manager.tournament_view.get_round_options,
-                        )
-                        if round_option == 1:
-                            tournament_manager.start_new_round()
-
-                        elif round_option == 2:
-                            tournament_manager.update_ranking()
-                            tournament_manager.display_by_rank()
-                        elif round_option == 3:
-                            pass
-                        elif round_option == 4:
-                            round_running = False
-                            tournament_running = False
-                            running = False
+                    end_tournament = tournament_manager.start_tournament()
+                    players = {}
+                    # FOR TEST ONLY
+                    players = players_test()
+                    # FOR TEST ONLY
+                    tournament_running = False
+                    if not end_tournament:
+                        running = False
 
                 elif tournament_option == 3:
                     pass
@@ -96,7 +89,7 @@ def main():
             players[player_counter] = added_player
             player_counter += 1
         elif user_choice == 3:
-            pass
+            tournament_manager.display_by_rank()
         elif user_choice == 4:
             running = False
 

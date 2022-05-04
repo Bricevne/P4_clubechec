@@ -62,13 +62,26 @@ class Tournament:
         """Set tournament's description."""
         self.rounds.append(round)
 
+    def sort_by_rank_list(self) -> list:
+        """Sort players objects by rank."""
+        return sorted(self.players.items(), key=lambda x: x[1].rank)
+
+    def sort_by_score_list(self) -> list:
+        """Sort players objects by decreasing total score.
+
+        Output in list format.
+        """
+        return sorted(
+            self.players.items(), key=lambda x: x[1].total_score, reverse=True
+        )
+
     def generate_pairs(self) -> None:
         """Generate player pairs.
 
         round_list is the list of rounds in the tournament model.
         """
         if len(self.rounds) == 0:
-            sorted_players = self.sort_by_rank()
+            sorted_players = self.sort_by_rank_list()
 
             matches = []
             for number in range(0, len(sorted_players) // 2):
@@ -90,32 +103,18 @@ class Tournament:
                 matches.append(new_match)
             return matches
 
-    def sort_by_rank(self) -> list:
-        """Sort players objects by rank."""
-        return sorted(self.players.items(), key=lambda x: x[1].rank)
-
-    def sort_by_score_list(self) -> list:
-        """Sort players objects by decreasing total score.
-        Output in list format."""
-        return sorted(
-            self.players.items(), key=lambda x: x[1].total_score, reverse=True
-        )
-
     def sort_by_score_dict(self) -> None:
         """Sort players objects by decreasing total score.
-        Output in dict format."""
-        sorted_players = {
-            k: v
-            for k, v in sorted(
-                self.players.items(), key=lambda item: item[1].total_score, reverse=True
-            )
-        }
+
+        Output in dict format.
+        """
+        sorted_players = {k: v for k, v in self.sort_by_score_list()}
         return sorted_players
 
     def sort_by_rank_dict(self) -> None:
         """Sort players objects by decreasing total score.
-        Output in dict format."""
-        sorted_players = {
-            k: v for k, v in sorted(self.players.items(), key=lambda item: item[1].rank)
-        }
+
+        Output in dict format.
+        """
+        sorted_players = {k: v for k, v in self.sort_by_rank_list()}
         return sorted_players
