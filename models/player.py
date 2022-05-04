@@ -5,7 +5,7 @@ class Player:
     """Class managing the players."""
 
     def __init__(
-        self, name: str, surname: str, birthdate: str, gender: str, rank: int
+        self, name: str, surname: str, birthdate: str, gender: str, elo: int
     ) -> None:
         """Initialize player objects."""
         self.name = name
@@ -13,7 +13,8 @@ class Player:
         self.birthdate = birthdate
         self.gender = gender
         self.total_score = 0
-        self.rank = rank
+        self.elo = elo
+        self.rank = 0
 
     def update_score(self, points) -> None:
         """Update the player's total score."""

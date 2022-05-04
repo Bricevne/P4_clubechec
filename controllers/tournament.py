@@ -9,11 +9,10 @@ from models.match import Match
 class TournamentManager:
     """Class managing the tournament."""
 
-    def __init__(self, available_players: dict) -> None:
+    def __init__(self) -> None:
         """Initialize class."""
         self.tournament = Tournament()
         self.tournament_view = TournamentView()
-        self.available_players = available_players
 
     @staticmethod
     def dash(n):
@@ -80,9 +79,9 @@ class TournamentManager:
                     self.tournament_view.get_wrong_option()
         return option
 
-    def get_tournament_players(self) -> bool:
+    def get_tournament_players(self, available_players) -> bool:
         """Get 8 players who will participate in the tournament."""
-        if len(self.available_players) < 8:
+        if len(available_players) < 8:
             self.tournament_view.get_wrong_player_number()
             return False
         else:
@@ -90,15 +89,15 @@ class TournamentManager:
             counter = 0
             selected_players = {}
             while counter < 8:
-                for id, player in self.available_players.items():
+                for id, player in available_players.items():
                     if id not in selected_players.keys():
                         print(f"{id} : {player.name} {player.surname}")
                 player_id = int(input(self.tournament_view.get_player()))
                 if (
                     player_id not in selected_players.keys()
-                    and player_id in self.available_players.keys()
+                    and player_id in available_players.keys()
                 ):
-                    selected_players[player_id] = self.available_players[player_id]
+                    selected_players[player_id] = available_players[player_id]
                     counter += 1
                 else:
                     print(self.tournament_view.get_wrong_id())
@@ -227,7 +226,7 @@ class TournamentManager:
     def display_by_rank(self):
         """Display the players by rank."""
         self.update_ranking()
-        sorted_players = self.tournament.sort_by_rank_dict()
+        sorted_players = self.tournament.sort_by_score_dict()
         for player in sorted_players.values():
             self.tournament_view.display_rank(player)
 

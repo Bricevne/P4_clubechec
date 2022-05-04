@@ -1,9 +1,7 @@
 """Main code."""
 
-from controllers.menu import MenuManager
-from controllers.user import UserManager
-from controllers.tournament import TournamentManager
 
+from controllers.application import Application
 
 from models.player import Player
 
@@ -13,14 +11,14 @@ def players_test():
     """Test function."""
     player = {}
     counter = 1
-    brice = Player("Brice", "Venayre", "", "M", 1)
-    paul = Player("Paul", "Ducasse", "", "M", 4)
-    jean = Player("Jean", "Courage", "", "M", 2)
-    marie = Player("Marie", "Larisse", "", "F", 3)
-    helene = Player("Helene", "Walker", "", "F", 6)
-    romain = Player("Romain", "Rondet", "", "M", 5)
-    alan = Player("Alan", "Smith", "", "M", 7)
-    celia = Player("Celia", "Lachaise", "", "F", 8)
+    brice = Player("Brice", "Venayre", "", "M", 1234)
+    paul = Player("Paul", "Ducasse", "", "M", 4232)
+    jean = Player("Jean", "Courage", "", "M", 2344)
+    marie = Player("Marie", "Larisse", "", "F", 3654)
+    helene = Player("Helene", "Walker", "", "F", 5566)
+    romain = Player("Romain", "Rondet", "", "M", 6456)
+    alan = Player("Alan", "Smith", "", "M", 7543)
+    celia = Player("Celia", "Lachaise", "", "F", 8567)
     for i in (brice, paul, jean, marie, helene, romain, alan, celia):
         player[counter] = i
         counter += 1
@@ -32,8 +30,7 @@ def players_test():
 
 def main():
     """Code managing the whole tournament process."""
-    menu_manager = MenuManager()
-    user_manager = UserManager()
+    application = Application()
 
     players = {}
 
@@ -48,28 +45,28 @@ def main():
     running = True
     while running:
 
-        user_choice = menu_manager.select_menu_option()
+        user_choice = application.menu_manager.select_menu_option()
 
         if user_choice == 1:
 
-            tournament_manager = TournamentManager(players)
-
-            enough_players = tournament_manager.get_tournament_players()
+            enough_players = application.tournament_manager.get_tournament_players(
+                players
+            )
 
             tournament_running = True
             if not enough_players:
                 tournament_running = False
 
             while tournament_running:
-                tournament_option = tournament_manager.select_option(
+                tournament_option = application.tournament_manager.select_option(
                     range(1, 5),
-                    tournament_manager.tournament_view.get_tournament_options,
+                    application.tournament_manager.tournament_view.get_tournament_options,
                 )
                 if tournament_option == 1:
-                    tournament_manager.get_round()
+                    application.tournament_manager.get_round()
                 elif tournament_option == 2:
 
-                    end_tournament = tournament_manager.start_tournament()
+                    end_tournament = application.tournament_manager.start_tournament()
                     players = {}
                     # FOR TEST ONLY
                     players = players_test()
@@ -85,11 +82,11 @@ def main():
                     running = False
 
         elif user_choice == 2:
-            added_player = user_manager.add_player()
+            added_player = application.user_manager.add_player()
             players[player_counter] = added_player
             player_counter += 1
         elif user_choice == 3:
-            tournament_manager.display_by_rank()
+            application.tournament_manager.display_by_rank()
         elif user_choice == 4:
             running = False
 

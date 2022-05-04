@@ -62,9 +62,9 @@ class Tournament:
         """Set tournament's description."""
         self.rounds.append(round)
 
-    def sort_by_rank_list(self) -> list:
+    def sort_by_elo_list(self) -> list:
         """Sort players objects by rank."""
-        return sorted(self.players.items(), key=lambda x: x[1].rank)
+        return sorted(self.players.items(), key=lambda x: x[1].elo)
 
     def sort_by_score_list(self) -> list:
         """Sort players objects by decreasing total score.
@@ -81,7 +81,7 @@ class Tournament:
         round_list is the list of rounds in the tournament model.
         """
         if len(self.rounds) == 0:
-            sorted_players = self.sort_by_rank_list()
+            sorted_players = self.sort_by_elo_list()
 
             matches = []
             for number in range(0, len(sorted_players) // 2):
@@ -111,10 +111,10 @@ class Tournament:
         sorted_players = {k: v for k, v in self.sort_by_score_list()}
         return sorted_players
 
-    def sort_by_rank_dict(self) -> None:
+    def sort_by_elo_dict(self) -> None:
         """Sort players objects by decreasing total score.
 
         Output in dict format.
         """
-        sorted_players = {k: v for k, v in self.sort_by_rank_list()}
+        sorted_players = {k: v for k, v in self.sort_by_elo_list()}
         return sorted_players
