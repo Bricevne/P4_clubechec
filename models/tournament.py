@@ -21,6 +21,7 @@ class Tournament:
         self.place = ""
         self.date = ""
         self.number_of_rounds = 4
+        self.number_of_players = 8
         self.rounds = []
         self.players = {}
         self.time_control = ""
@@ -57,6 +58,10 @@ class Tournament:
     def set_round(self, number_of_rounds: int) -> None:
         """Set tournament's description."""
         self.number_of_rounds = number_of_rounds
+
+    def set_number_of_players(self, number_of_players: int) -> None:
+        """Set tournament's description."""
+        self.number_of_players = number_of_players
 
     def add_round(self, round: object) -> None:
         """Set tournament's description."""

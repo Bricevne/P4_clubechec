@@ -32,9 +32,15 @@ class TournamentView:
         """Display round input."""
         return "Number of rounds: "
 
-    def get_wrong_player_number(self) -> None:
+    def get_view_players(self) -> str:
+        """Display number of players input."""
+        return "Number of players: "
+
+    def get_wrong_player_number(self, number_of_players) -> None:
         """Display a message when not enough players are available for the tournament."""
-        print("You need at least 8 players to choose from for a tournament.")
+        print(
+            f"You need at least {number_of_players} players to choose from for a tournament."
+        )
 
     def get_player(self) -> str:
         """Display a message for selecting a player."""
@@ -47,17 +53,18 @@ class TournamentView:
     def get_tournament_options(self) -> str:
         """Display tournament menu."""
         menu_options = "\n\
-        1. Modify round numbers\n\
-        2. Start tournament\n\
-        3. Save data\n\
-        4. Quit\n"
+        1. Start tournament\n\
+        2. Modify round numbers\n\
+        3. Modify number of players\n\
+        4. Save data\n\
+        5. Quit\n"
         return menu_options
 
     def get_round_options(self) -> str:
         """Display round menu."""
         menu_options = "\n\
         1. New round\n\
-        2. Update rankings\n\
+        2. Show ranking\n\
         3. Save data\n\
         4. Quit\n"
         return menu_options
@@ -86,7 +93,7 @@ class TournamentView:
         message = "You have to give a score (Lose : 0, Win : 1, Draw : 0.5)"
         print(message)
 
-    def display_rank(self, player):
+    def show_ranking(self, player):
         """Display the message format for rankings."""
         message = f"{player.rank} : {player.name} {player.surname} - Total score : {player.total_score}"
         print(message)

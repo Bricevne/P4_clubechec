@@ -4,6 +4,7 @@ from models.tournament import Tournament
 from views.tournament import TournamentView
 from models.round import Round
 from models.match import Match
+from os import system
 
 
 class TournamentManager:
@@ -65,6 +66,7 @@ class TournamentManager:
         self.get_tournament_date()
         self.get_tournament_time_control()
         self.get_tournament_description()
+        system("clear")
 
     def select_option(self, number_of_options: tuple, get_view_options):
         """Ask for the available options."""
@@ -79,16 +81,33 @@ class TournamentManager:
                     self.tournament_view.get_wrong_option()
         return option
 
-    def get_tournament_players(self, available_players) -> bool:
+    def set_tournament_information(self, available_players) -> bool:
         """Get 8 players who will participate in the tournament."""
-        if len(available_players) < 8:
-            self.tournament_view.get_wrong_player_number()
+        if len(available_players) < self.tournament.number_of_players:
+            self.tournament_view.get_wrong_player_number(
+                self.tournament.number_of_players
+            )
             return False
         else:
             self.get_tournament_information()
+            return True
+
+    def get_participating_players(self, available_players):
+        """_summary_.
+
+        Args:
+            available_players (_type_): _description_
+        """
+        if len(available_players) < self.tournament.number_of_players:
+            self.tournament_view.get_wrong_player_number(
+                self.tournament.number_of_players
+            )
+            return False
+        else:
             counter = 0
             selected_players = {}
-            while counter < 8:
+            while counter < self.tournament.number_of_players:
+                system("clear")
                 for id, player in available_players.items():
                     if id not in selected_players.keys():
                         print(f"{id} : {player.name} {player.surname}")
@@ -104,7 +123,7 @@ class TournamentManager:
             self.tournament.select_players(selected_players)
             return True
 
-    def get_round(self) -> None:
+    def get_round_numbers(self) -> None:
         """Ask for the tournament's number of rounds."""
         try:
             number_of_rounds = int(input(self.tournament_view.get_view_round()))
@@ -121,6 +140,15 @@ class TournamentManager:
         """
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
+
+    def get_player_numbers(self) -> None:
+        """Ask for the tournament's number of rounds."""
+        try:
+            number_of_players = int(input(self.tournament_view.get_view_players()))
+        except ValueError:
+            self.tournament_view.get_wrong_option()
+        else:
+            self.tournament.set_number_of_players(number_of_players)
 
     def get_players_matches(self, matches) -> tuple:
         """Display all the matches that will occur during the round."""
@@ -167,8 +195,8 @@ class TournamentManager:
             self.get_new_total_scores(match_result)
 
             # print(self.tournament.players)
-            for v in self.tournament.players.values():
-                print(v.total_score)
+            # for v in self.tournament.players.values():
+            # print(v.total_score)
 
             new_round.add_match(match_result)
             # print(match_result.players_score)
@@ -225,10 +253,9 @@ class TournamentManager:
 
     def display_by_rank(self):
         """Display the players by rank."""
-        self.update_ranking()
         sorted_players = self.tournament.sort_by_score_dict()
         for player in sorted_players.values():
-            self.tournament_view.display_rank(player)
+            self.tournament_view.show_ranking(player)
 
     def start_tournament(self):
         """Start tournament."""
@@ -243,9 +270,12 @@ class TournamentManager:
                 self.tournament_view.get_round_options,
             )
             if round_option == 1:
+                system("clear")
                 self.start_new_round()
+                self.update_ranking()
 
             elif round_option == 2:
+                system("clear")
                 self.display_by_rank()
             elif round_option == 3:
                 pass
@@ -253,6 +283,7 @@ class TournamentManager:
                 round_running = False
                 return False
 
+        system("clear")
         self.tournament_view.display_message_end_tournament()
         self.display_by_rank()
         return True

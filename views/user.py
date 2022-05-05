@@ -50,6 +50,7 @@ class UserView:
         """Display submenu."""
         menu_options = "\n\
         1. Modify player information\n\
-        2. Display by elo\n\
-        3. Back to menu\n"
+        2. Display by surname\n\
+        3. Display by elo\n\
+        4. Back to menu\n"
         return menu_options

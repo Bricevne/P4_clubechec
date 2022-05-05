@@ -2,6 +2,7 @@
 
 from models.player import Player
 from views.user import UserView
+from os import system
 
 
 class UserManager:
@@ -13,6 +14,7 @@ class UserManager:
 
     def add_player(self) -> object:
         """Add a player."""
+        system("clear")
         name = input(self.display.get_name()).capitalize()
         surname = input(self.display.get_surname()).capitalize()
         birthdate = input(self.display.get_birthdate())
@@ -71,16 +73,21 @@ class UserManager:
         """
         user_choice = 0
         menu_running = True
-        self.display_players_by_surname(player_db)
 
         while menu_running:
-            user_choice = self.select_menu_option(3)
+            user_choice = self.select_menu_option(4)
+
             if user_choice == 1:
+
                 self.update_players_elo(player_db)
-                self.display_players_by_surname(player_db)
             elif user_choice == 2:
-                self.display_players_by_elo(player_db)
+                system("clear")
+                self.display_players_by_surname(player_db)
             elif user_choice == 3:
+                system("clear")
+                self.display_players_by_elo(player_db)
+            elif user_choice == 4:
+                system("clear")
                 menu_running = False
 
     def update_players_elo(self, db_player) -> None:
