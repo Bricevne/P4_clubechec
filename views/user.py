@@ -34,7 +34,7 @@ class UserView:
 
     def get_wrong_option(self) -> str:
         """Get wrong option."""
-        print("Select a valid option.")
+        print("Oops! That was no valid option, try again.")
 
     def display_player_confirmation(self) -> str:
         """"""

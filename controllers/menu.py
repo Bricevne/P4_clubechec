@@ -2,6 +2,7 @@
 
 
 from views.menu import MenuView
+from os import system
 
 
 class MenuManager:
@@ -18,8 +19,10 @@ class MenuManager:
             try:
                 menu_option = int(input(self.display.get_menu()))
             except ValueError:
+                system("clear")
                 self.display.get_wrong_choice()
             else:
+                system("clear")
                 if menu_option not in range(1, number_of_options + 1):
                     self.display.get_wrong_choice()
         return menu_option
