@@ -3,6 +3,7 @@
 from models.player import Player
 from views.user import UserView
 from os import system
+import re
 
 
 class UserManager:
@@ -12,17 +13,57 @@ class UserManager:
         """Init."""
         self.display = UserView()
 
+    def get_good_elo(self) -> None:
+        """Ask for the tournament's number of rounds."""
+        elo = 0
+        while elo == 0:
+            try:
+                elo = int(input(self.display.get_elo()))
+            except ValueError:
+                self.display.get_wrong_elo()
+            else:
+                return elo
+
+    def get_good_gender(self) -> None:
+        """Ask for the tournament's number of rounds."""
+        gender = ""
+        while gender not in ("M", "F"):
+            gender = input(self.display.get_gender()).capitalize()
+            if gender not in ("M", "F"):
+                self.display.get_wrong_gender()
+            else:
+                return gender
+
+    def get_good_birthdate(self):
+        """
+        Check if a birthdate is in the format YYYY-MM-DD.
+
+        YYYY between 0000 and 9999.
+        MM between 01 and 12.
+        DD between 01 and 31.
+        Does not check unvalid dates such as 2000-02-30.
+        """
+        regex = r"(^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$)"
+        not_right = True
+        while not_right:
+            birthdate = input(self.display.get_birthdate())
+            if re.search(regex, birthdate):
+                not_right = False
+            else:
+                self.display.get_wrong_birthdate()
+
     def add_player(self) -> object:
         """Add a player."""
         system("clear")
         name = input(self.display.get_name()).capitalize()
         surname = input(self.display.get_surname()).capitalize()
-        birthdate = input(self.display.get_birthdate())
-        gender = input(self.display.get_gender()).capitalize()
-        elo = int(input(self.display.get_elo()))
+        birthdate = self.get_good_birthdate()
+        gender = self.get_good_gender()
+        elo = self.get_good_elo()
         confirmation = self.get_user_confirmation(
             ("y", "Y"), ("n", "N"), self.display.get_confirmation
         )
+        system("clear")
         if confirmation:
             player = Player(name, surname, birthdate, gender, elo)
             self.display.display_player_confirmation()

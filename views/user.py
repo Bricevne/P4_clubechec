@@ -28,6 +28,15 @@ class UserView:
         """Display rank."""
         return "Elo: "
 
+    def get_wrong_elo(self) -> None:
+        print("Elo must be an integer.")
+
+    def get_wrong_gender(self) -> None:
+        print("Gender must be M for males and F for females.")
+
+    def get_wrong_birthdate(self) -> None:
+        print("Birthdate must be in the format YYYY-MM-DD.")
+
     def get_confirmation(self) -> str:
         """Ask for the user's confirmation."""
         return "Do you confirm? (y/n) : "
