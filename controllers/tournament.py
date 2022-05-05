@@ -69,13 +69,13 @@ class TournamentManager:
     def select_option(self, number_of_options: tuple, get_view_options):
         """Ask for the available options."""
         option = 0
-        while option not in number_of_options:
+        while option not in range(1, number_of_options + 1):
             try:
                 option = int(input(get_view_options()))
             except ValueError:
                 self.tournament_view.get_wrong_option()
             else:
-                if option not in number_of_options:
+                if option not in range(1, number_of_options + 1):
                     self.tournament_view.get_wrong_option()
         return option
 
@@ -239,7 +239,7 @@ class TournamentManager:
         ):
 
             round_option = self.select_option(
-                range(1, 5),
+                4,
                 self.tournament_view.get_round_options,
             )
             if round_option == 1:

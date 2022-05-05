@@ -8,12 +8,17 @@ class MenuView:
         """Initialize class."""
         pass
 
+    def display_welcome(self) -> None:
+        """_summary_."""
+        message = "Welcome to the event! Please choose an option."
+        print(message)
+
     def get_menu(self) -> str:
         """Display menu."""
-        menu_options = "Welcome to the event! Please choose an option.\n\
+        menu_options = "\n\
         1. Create tournament\n\
         2. Add player\n\
-        3. View ranking\n\
+        3. Display players\n\
         4. Quit\n"
         return menu_options
 
