@@ -49,6 +49,7 @@ class UserManager:
             birthdate = input(self.display.get_birthdate())
             if re.search(regex, birthdate):
                 not_right = False
+                return birthdate
             else:
                 self.display.get_wrong_birthdate()
 

@@ -75,9 +75,11 @@ class TournamentManager:
             try:
                 option = int(input(get_view_options()))
             except ValueError:
+                system("clear")
                 self.tournament_view.get_wrong_option()
             else:
                 if option not in range(1, number_of_options + 1):
+                    system("clear")
                     self.tournament_view.get_wrong_option()
         return option
 
@@ -107,19 +109,25 @@ class TournamentManager:
             counter = 0
             selected_players = {}
             while counter < self.tournament.number_of_players:
-                system("clear")
                 for id, player in available_players.items():
                     if id not in selected_players.keys():
                         print(f"{id} : {player.name} {player.surname}")
-                player_id = int(input(self.tournament_view.get_player()))
-                if (
-                    player_id not in selected_players.keys()
-                    and player_id in available_players.keys()
-                ):
-                    selected_players[player_id] = available_players[player_id]
-                    counter += 1
-                else:
+                try:
+                    player_id = int(input(self.tournament_view.get_player()))
+                except ValueError:
+                    system("clear")
                     print(self.tournament_view.get_wrong_id())
+                else:
+                    if (
+                        player_id not in selected_players.keys()
+                        and player_id in available_players.keys()
+                    ):
+                        selected_players[player_id] = available_players[player_id]
+                        counter += 1
+                        system("clear")
+                    else:
+                        system("clear")
+                        print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
             return True
 
