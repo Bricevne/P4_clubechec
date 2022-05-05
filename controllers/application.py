@@ -4,7 +4,7 @@
 from controllers.menu import MenuManager
 from controllers.user import UserManager
 from controllers.tournament import TournamentManager
-from controllers.db import DbPlayer
+from controllers.db import DbPlayer, DbTournament
 
 
 class Application:
@@ -16,3 +16,4 @@ class Application:
         self.tournament_manager = TournamentManager()
         self.menu_manager = MenuManager()
         self.db_player = DbPlayer()
+        self.db_tournament = DbTournament()

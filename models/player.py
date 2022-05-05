@@ -43,7 +43,7 @@ class Player:
             "birthdate": self.birthdate,
             "gender": self.gender,
             "elo": self.elo,
-            "Total score": self.total_score,
+            "total_score": self.total_score,
             "Rank": self.rank,
         }
         return serialized_player

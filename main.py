@@ -2,6 +2,7 @@
 
 
 from os import system
+from socket import AF_APPLETALK
 from controllers.application import Application
 
 
@@ -19,6 +20,9 @@ def main():
             players = application.user_manager.get_all_players(application.db_player)
             enough_players = application.tournament_manager.set_tournament_information(
                 players
+            )
+            application.db_tournament.add_tournament_db(
+                application.tournament_manager.tournament
             )
             tournament_running = True
             if not enough_players:

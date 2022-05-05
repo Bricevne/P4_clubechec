@@ -123,3 +123,17 @@ class Tournament:
         """
         sorted_players = {k: v for k, v in self.sort_by_elo_list()}
         return sorted_players
+
+    def serialize_tournament(self):
+        """Serialize a tournament in the database."""
+        serialized_tournament = {
+            "name": self.name,
+            "place": self.place,
+            "number_of_rounds": self.number_of_players,
+            "number_of_players": self.number_of_players,
+            "rounds": self.rounds,
+            "players": self.players,
+            "time_control": self.time_control,
+            "description": self.description,
+        }
+        return serialized_tournament
