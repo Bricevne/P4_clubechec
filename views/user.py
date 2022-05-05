@@ -54,3 +54,23 @@ class UserView:
         3. Display by elo\n\
         4. Back to menu\n"
         return menu_options
+
+    def get_player_by_id(self) -> str:
+        message = "Select the player's id: "
+        return message
+
+    def get_new_elo(self) -> str:
+        message = "New elo: "
+        return message
+
+    def display_successful_change(self) -> str:
+        message = "Player's elo has been successfully modified."
+        print(message)
+
+    def display_unsuccessful_change(self) -> str:
+        message = "No player with this ID has been found."
+        print(message)
+
+    def display_wrong_id_type(self) -> str:
+        message = "This is not an ID."
+        print(message)

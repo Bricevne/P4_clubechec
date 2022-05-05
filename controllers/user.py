@@ -93,24 +93,30 @@ class UserManager:
     def update_players_elo(self, db_player) -> None:
         """Method used to modify the elo rank of a player.
         if the player exists in the database, else return an error."""
-        player_id = int(input("Quel joueur ? "))
-
-        player_found = db_player.search_player_by_id(player_id)
-        if player_found:
-            player = Player(
-                player_found["name"],
-                player_found["surname"],
-                player_found["birthdate"],
-                player_found["gender"],
-                player_found["elo"],
-            )
-
-            elo = int(input("nouvel elo :"))
-            player.elo = elo
-            db_player.update_player(player, player_id)
-            print("Le joueur a bien été modifié.")
+        try:
+            player_id = int(input(self.display.get_player_by_id()))
+        except ValueError:
+            system("clear")
+            self.display.display_wrong_id_type()
         else:
-            print("Aucun joueur avec cet ID n'a été trouvé.")
+            player_found = db_player.search_player_by_id(player_id)
+            if player_found:
+                player = Player(
+                    player_found["name"],
+                    player_found["surname"],
+                    player_found["birthdate"],
+                    player_found["gender"],
+                    player_found["elo"],
+                )
+
+                elo = int(input(self.display.get_new_elo()))
+                player.elo = elo
+                db_player.update_player(player, player_id)
+                system("clear")
+                self.display.display_successful_change()
+            else:
+                system("clear")
+                self.display.display_unsuccessful_change()
 
     def get_all_players(self, player_db):
         """_summary_."""
