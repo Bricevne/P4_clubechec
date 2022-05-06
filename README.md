@@ -9,18 +9,24 @@ Clone the repository on your computer.
 
 Set your virtual environment under python 3.10
 
-pipenv install  # create the virtual environment and install the dependencies  
-pipenv shell  # activate the virtual environment
+Create the virtual environment and install the dependencies
+`pipenv install` 
 
-pipenv install -r requirements.txt # install the necessary libraries in the virtual environnement
+Activate the virtual environment
+`pipenv shell`
+
+Install the necessary libraries in the virtual environnement
+`pipenv install -r requirements.txt`
 
 
 ## Usage
 
-python3 main.py  # run the code
+Run the code:
+`python3 main.py`
 
-## Générer un rapport flake8
+## Generate a report
 
+Generate a flake8 report:
 `flake8 --format=html --htmldir=flake-report`
 
 ## License
