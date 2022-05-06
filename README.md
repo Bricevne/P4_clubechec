@@ -19,6 +19,10 @@ pipenv install -r requirements.txt # install the necessary libraries in the virt
 
 python3 main.py  # run the code
 
+## Générer un rapport flake8
+
+`flake8 --format=html --htmldir=flake-report`
+
 ## License
 
 MIT

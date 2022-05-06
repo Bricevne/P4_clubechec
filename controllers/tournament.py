@@ -311,10 +311,8 @@ class TournamentManager:
                     self.get_participating_players(players)
                     self.update_db(application)
                 else:
-                    end_tournament = self.start_tournament(application)
+                    self.start_tournament(application)
                     tournament_running = False
-                    if not end_tournament:
-                        running = False
 
             elif tournament_option == 2:
                 system("clear")
@@ -326,7 +324,6 @@ class TournamentManager:
                 self.update_db(application)
             elif tournament_option == 4:
                 tournament_running = False
-                running = False
 
     def get_tournament_db_id(self, application, tournament_description) -> None:
         """Method used to modify the elo rank of a player.
@@ -342,6 +339,11 @@ class TournamentManager:
         application.db_tournament.update_tournament_db(tournament, tournament_id)
 
     def update_db(self, application):
+        """z.
+
+        Args:
+            application (_type_): _description_
+        """
         tournament_id = self.get_tournament_db_id(
             application, self.tournament.description
         )

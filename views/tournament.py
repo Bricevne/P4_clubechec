@@ -98,5 +98,5 @@ class TournamentView:
 
     def display_message_end_tournament(self) -> None:
         """Diaplsy."""
-        message = "The tournament ends ! The final ranking is: "
+        message = "The tournament ended ! The final ranking is: "
         print(message)
