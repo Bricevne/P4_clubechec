@@ -287,7 +287,6 @@ class TournamentManager:
             elif round_option == 3:
                 return False
 
-        system("clear")
         self.tournament_view.display_message_end_tournament()
         self.display_by_rank()
         return True
@@ -317,8 +316,6 @@ class TournamentManager:
                 if len(self.tournament.players) == 0:
                     self.get_participating_players(players)
                     self.update_db(application)
-                    print(self.tournament.players)
-
                 else:
                     end_tournament = self.start_tournament(application)
                     tournament_running = False
@@ -364,17 +361,18 @@ class TournamentManager:
         rounds_serialized = []
         if len(self.tournament.rounds) > 0:
             for round in self.tournament.rounds:
+                new_round = Round()
+                new_round.name = round.name
+                new_round.start_time = round.start_time
+                new_round.end_time = round.end_time
+
                 for match in round.match:
                     serialized_match = Match.serialize_match(match)
 
-                    new_round = Round()
-                    new_round.name = round.name
-                    new_round.match = serialized_match
-                    new_round.start_time = round.start_time
-                    new_round.end_time = round.end_time
+                    new_round.match.append(serialized_match)
 
-                    serialized_round = Round.serialize_round(new_round)
-                    rounds_serialized.append(serialized_round)
+                serialized_round = Round.serialize_round(new_round)
+                rounds_serialized.append(serialized_round)
 
         tournament_to_serialize = Tournament()
         tournament_to_serialize.name = self.tournament.name

@@ -237,18 +237,21 @@ class UserManager:
 
                 tournament_rounds = []
                 if len(tournament_found["rounds"]) > 0:
-                    for rounds_found in tournament_found["rounds"]:
-                        print(rounds_found["match"]["players_score"])
-                        match = Match(rounds_found["match"]["players_score"])
 
+                    for rounds_found in tournament_found["rounds"]:
                         round = Round()
                         round.name = rounds_found["name"]
-                        round.match = match
                         round.start_time = rounds_found["start_time"]
                         round.end_time = rounds_found["end_time"]
 
+                        for match_found in rounds_found["match"]:
+                            match = Match(match_found["players_score"])
+
+                            round.match.append(match)
+
                         tournament_rounds.append(round)
-                tournament.rounds = tournament_rounds
+                    tournament.rounds = tournament_rounds
+                print(len(tournament.rounds))
                 return tournament
             else:
                 print("not found")
