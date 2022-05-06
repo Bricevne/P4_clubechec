@@ -1,4 +1,4 @@
 Pipfile
 Pipfile.lock
 __pycache__/
-flake-report/
+flake8_report/

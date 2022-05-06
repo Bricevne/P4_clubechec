@@ -32,7 +32,7 @@ Run the code:
 
 Generate a flake8 report:
 
-`flake8 --format=html --htmldir=flake-report`
+`flake8 --format=html --htmldir=flake8_report`
 
 ## License
 
