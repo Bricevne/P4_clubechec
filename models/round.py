@@ -33,3 +33,13 @@ class Round:
     def add_match(self, match) -> None:
         """Add a match to the round."""
         self.match.append(match)
+
+    def serialize_round(self):
+        """Serialize a player for the list of tournaments in the database."""
+        serialized_round = {
+            "name": self.name,
+            "match": self.match,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+        }
+        return serialized_round

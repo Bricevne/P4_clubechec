@@ -56,8 +56,7 @@ class TournamentView:
         1. Start tournament\n\
         2. Modify round numbers\n\
         3. Modify number of players\n\
-        4. Save data\n\
-        5. Quit\n"
+        4. Quit\n"
         return menu_options
 
     def get_round_options(self) -> str:
@@ -65,8 +64,7 @@ class TournamentView:
         menu_options = "\n\
         1. New round\n\
         2. Show ranking\n\
-        3. Save data\n\
-        4. Quit\n"
+        3. Quit\n"
         return menu_options
 
     def get_wrong_option(self) -> None:

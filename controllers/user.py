@@ -2,8 +2,12 @@
 
 from models.player import Player
 from views.user import UserView
+from models.match import Match
+from models.round import Round
+
 from os import system
 import re
+from models.tournament import Tournament
 
 
 class UserManager:
@@ -95,12 +99,12 @@ class UserManager:
         for player in players:
             self.display.display_sorted_players(player)
 
-    def select_menu_option(self, number_of_options) -> int:
+    def select_menu_option(self, number_of_options, get_menu) -> int:
         """Ask for User choice."""
         menu_option = 0
         while menu_option not in range(1, number_of_options + 1):
             try:
-                menu_option = int(input(self.display.get_submenu()))
+                menu_option = int(input(get_menu()))
             except ValueError:
                 self.display.get_wrong_option()
             else:
@@ -117,7 +121,7 @@ class UserManager:
         menu_running = True
 
         while menu_running:
-            user_choice = self.select_menu_option(4)
+            user_choice = self.select_menu_option(4, self.display.get_submenu)
 
             if user_choice == 1:
 
@@ -173,3 +177,78 @@ class UserManager:
             )
             available_players[player_found.doc_id] = player
         return available_players
+
+    def select_tournaments(self, tournament_db) -> None:
+        """Dispatch the action requested by the user.
+        Args:
+            user_choice (int): contains the user choice entered by the user.
+        """
+        user_choice = 0
+        menu_running = True
+
+        while menu_running:
+            for tournament in tournament_db.tournaments:
+                self.display.display_tournaments(tournament)
+
+            user_choice = self.select_menu_option(2, self.display.get_import_menu)
+
+            if user_choice == 1:
+                tournament = self.recover_tournament(tournament_db)
+                return tournament
+            elif user_choice == 2:
+                system("clear")
+                menu_running = False
+
+    def recover_tournament(self, db_tournament):
+        """
+        Update the elo rank of a player.
+
+        if the player exists in the database, else return an error.
+        """
+        try:
+            tournament_id = int(input(self.display.get_tournament_by_id()))
+        except ValueError:
+            self.display.display_wrong_id_type()
+        else:
+            tournament_found = db_tournament.search_tournament_by_id(tournament_id)
+
+            if tournament_found:
+                tournament = Tournament()
+                tournament.name = tournament_found["name"]
+                tournament.place = tournament_found["place"]
+                tournament.date = tournament_found["date"]
+                tournament.description = tournament_found["description"]
+                tournament.time_control = tournament_found["time_control"]
+
+                tournament_players = {}
+                if len(tournament_found["players"]) > 0:
+                    for id, player_found in tournament_found["players"].items():
+                        player = Player(
+                            player_found["name"],
+                            player_found["surname"],
+                            player_found["birthdate"],
+                            player_found["gender"],
+                            player_found["elo"],
+                        )
+                        player.total_score = player_found["total_score"]
+                        player.rank = player_found["rank"]
+                        tournament_players[id] = player
+                tournament.players = tournament_players
+
+                tournament_rounds = []
+                if len(tournament_found["rounds"]) > 0:
+                    for rounds_found in tournament_found["rounds"]:
+                        print(rounds_found["match"]["players_score"])
+                        match = Match(rounds_found["match"]["players_score"])
+
+                        round = Round()
+                        round.name = rounds_found["name"]
+                        round.match = match
+                        round.start_time = rounds_found["start_time"]
+                        round.end_time = rounds_found["end_time"]
+
+                        tournament_rounds.append(round)
+                tournament.rounds = tournament_rounds
+                return tournament
+            else:
+                print("not found")

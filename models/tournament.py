@@ -69,7 +69,7 @@ class Tournament:
 
     def sort_by_elo_list(self) -> list:
         """Sort players objects by rank."""
-        return sorted(self.players.items(), key=lambda x: x[1].elo)
+        return sorted(self.players.items(), key=lambda player: player[1].elo)
 
     def sort_by_score_list(self) -> list:
         """Sort players objects by decreasing total score.
@@ -77,7 +77,7 @@ class Tournament:
         Output in list format.
         """
         return sorted(
-            self.players.items(), key=lambda x: x[1].total_score, reverse=True
+            self.players.items(), key=lambda player: player[1].total_score, reverse=True
         )
 
     def generate_pairs(self) -> None:
@@ -129,7 +129,8 @@ class Tournament:
         serialized_tournament = {
             "name": self.name,
             "place": self.place,
-            "number_of_rounds": self.number_of_players,
+            "date": self.date,
+            "number_of_rounds": self.number_of_rounds,
             "number_of_players": self.number_of_players,
             "rounds": self.rounds,
             "players": self.players,

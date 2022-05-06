@@ -44,6 +44,6 @@ class Player:
             "gender": self.gender,
             "elo": self.elo,
             "total_score": self.total_score,
-            "Rank": self.rank,
+            "rank": self.rank,
         }
         return serialized_player

@@ -83,3 +83,20 @@ class UserView:
     def display_wrong_id_type(self) -> str:
         message = "This is not an ID."
         print(message)
+
+    def get_import_menu(self):
+        """Display submenu."""
+        menu_options = "\n\
+        1. Select a tournament\n\
+        2. Back to menu\n"
+        return menu_options
+
+    def display_tournaments(self, tournament):
+        print(
+            f"id: {tournament.doc_id}   name: {tournament['name']}  place: {tournament['place']}   "
+            f"description: {tournament['description']}"
+        )
+
+    def get_tournament_by_id(self) -> str:
+        message = "Select the tournament's id: "
+        return message

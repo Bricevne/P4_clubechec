@@ -19,7 +19,8 @@ class MenuView:
         1. Create tournament\n\
         2. Add player\n\
         3. Display players\n\
-        4. Quit\n"
+        4. Import Tournament\n\
+        5. Quit\n"
         return menu_options
 
     def get_wrong_choice(self) -> None:

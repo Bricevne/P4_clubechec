@@ -4,6 +4,7 @@ from models.tournament import Tournament
 from views.tournament import TournamentView
 from models.round import Round
 from models.match import Match
+from models.player import Player
 from os import system
 
 
@@ -104,7 +105,6 @@ class TournamentManager:
             self.tournament_view.get_wrong_player_number(
                 self.tournament.number_of_players
             )
-            return False
         else:
             counter = 0
             selected_players = {}
@@ -129,7 +129,6 @@ class TournamentManager:
                         system("clear")
                         print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
-            return True
 
     def get_round_numbers(self) -> None:
         """Ask for the tournament's number of rounds."""
@@ -265,33 +264,127 @@ class TournamentManager:
         for player in sorted_players.values():
             self.tournament_view.show_ranking(player)
 
-    def start_tournament(self):
+    def start_tournament(self, application):
         """Start tournament."""
         round_running = True
         while (
             len(self.tournament.rounds) < self.tournament.number_of_rounds
             and round_running
         ):
-
             round_option = self.select_option(
-                4,
+                3,
                 self.tournament_view.get_round_options,
             )
             if round_option == 1:
                 system("clear")
                 self.start_new_round()
+                self.update_db(application)
                 self.update_ranking()
 
             elif round_option == 2:
                 system("clear")
                 self.display_by_rank()
             elif round_option == 3:
-                pass
-            elif round_option == 4:
-                round_running = False
                 return False
 
         system("clear")
         self.tournament_view.display_message_end_tournament()
         self.display_by_rank()
         return True
+
+    def start_tournament_info(self, application: object):
+
+        tournament_running = True
+        players = application.user_manager.get_all_players(application.db_player)
+
+        # If there is already a time_control defined, tournament's information has already been set.
+        if self.tournament.time_control == "":
+            enough_players = self.set_tournament_information(players)
+            application.db_tournament.add_tournament_db(self.tournament)
+            if not enough_players:
+                tournament_running = False
+
+        while tournament_running:
+
+            if len(self.tournament.players) != 0:
+                tournament_option = 1
+            else:
+                tournament_option = self.select_option(
+                    4,
+                    self.tournament_view.get_tournament_options,
+                )
+            if tournament_option == 1:
+                if len(self.tournament.players) == 0:
+                    self.get_participating_players(players)
+                    self.update_db(application)
+                    print(self.tournament.players)
+
+                else:
+                    end_tournament = self.start_tournament(application)
+                    tournament_running = False
+                    if not end_tournament:
+                        running = False
+
+            elif tournament_option == 2:
+                system("clear")
+                self.get_round_numbers()
+                self.update_db(application)
+            elif tournament_option == 3:
+                system("clear")
+                self.get_player_numbers()
+                self.update_db(application)
+            elif tournament_option == 4:
+                tournament_running = False
+                running = False
+
+    def get_tournament_db_id(self, application, tournament_description) -> None:
+        """Method used to modify the elo rank of a player.
+        if the player exists in the database, else return an error."""
+        tournament_id = application.db_tournament.search_tournament_id_by_description(
+            tournament_description
+        )
+        return tournament_id
+
+    def update_tournament(self, application, tournament, tournament_id) -> None:
+        """Method used to modify the elo rank of a player.
+        if the player exists in the database, else return an error."""
+        application.db_tournament.update_tournament_db(tournament, tournament_id)
+
+    def update_db(self, application):
+        tournament_id = self.get_tournament_db_id(
+            application, self.tournament.description
+        )
+
+        players_serialized = {}
+        if len(self.tournament.players) > 0:
+            for id, player in self.tournament.players.items():
+                serialized_player = Player.serialize_player_tournament(player)
+                players_serialized[id] = serialized_player
+
+        rounds_serialized = []
+        if len(self.tournament.rounds) > 0:
+            for round in self.tournament.rounds:
+                for match in round.match:
+                    serialized_match = Match.serialize_match(match)
+
+                    new_round = Round()
+                    new_round.name = round.name
+                    new_round.match = serialized_match
+                    new_round.start_time = round.start_time
+                    new_round.end_time = round.end_time
+
+                    serialized_round = Round.serialize_round(new_round)
+                    rounds_serialized.append(serialized_round)
+
+        tournament_to_serialize = Tournament()
+        tournament_to_serialize.name = self.tournament.name
+        tournament_to_serialize.place = self.tournament.place
+        tournament_to_serialize.date = self.tournament.date
+        tournament_to_serialize.number_of_rounds = self.tournament.number_of_rounds
+        tournament_to_serialize.number_of_players = self.tournament.number_of_players
+        tournament_to_serialize.rounds = rounds_serialized
+        tournament_to_serialize.players = players_serialized
+        tournament_to_serialize.time_control = self.tournament.time_control
+        tournament_to_serialize.description = self.tournament.description
+
+        self.update_tournament(application, tournament_to_serialize, tournament_id)

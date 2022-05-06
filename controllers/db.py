@@ -2,10 +2,9 @@
 
 
 from tinydb import TinyDB, Query
-from models.player import Player
 
 DB = TinyDB("db/db.json")
-USER = Query()
+User = Query()
 TOURNAMENT = DB.table("Tournament")
 PLAYERS = DB.table("Players")
 
@@ -38,17 +37,17 @@ class DbPlayer:
     #             return player
     #     return None
 
-    # def search_player_by_id(self, player_id):
-    #     """_summary_.
+    def search_player_by_id(self, player_id):
+        """_summary_.
 
-    #     Args:
-    #         player_id (_type_): _description_
+        Args:
+            player_id (_type_): _description_
 
-    #     Returns:
-    #         _type_: _description_
-    #     """
-    #     player = self.players.get(doc_id=player_id)
-    #     return player
+        Returns:
+            _type_: _description_
+        """
+        player = self.players.get(doc_id=player_id)
+        return player
 
     def update_player(self, player: object, player_id: int) -> None:
         """Method used to modify a player in the database.
@@ -93,7 +92,7 @@ class DbPlayer:
 
 class DbTournament:
     def __init__(self) -> None:
-        self.tournament = TOURNAMENT
+        self.tournaments = TOURNAMENT
 
     def add_tournament_db(self, tournament) -> None:
         """Add a player to the players table in the database.
@@ -102,7 +101,7 @@ class DbTournament:
             player (Player): Player instance
         """
 
-        self.tournament.insert(tournament.serialize_tournament())
+        self.tournaments.insert(tournament.serialize_tournament())
 
     def update_tournament_db(self, tournament, tournament_id) -> None:
         """Add a player to the players table in the database.
@@ -111,6 +110,31 @@ class DbTournament:
             player (Player): Player instance
         """
 
-        self.tournament.update(
+        self.tournaments.update(
             tournament.serialize_tournament(), doc_ids=[tournament_id]
         )
+
+    def search_tournament_by_id(self, tournament_id):
+        """_summary_.
+
+        Args:
+            player_id (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        tournament = self.tournaments.get(doc_id=tournament_id)
+        return tournament
+
+    def search_tournament_id_by_description(self, description):
+        """_summary_.
+
+        Args:
+            player_id (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        for tournament in self.tournaments:
+            if tournament["description"] == description:
+                return tournament.doc_id
