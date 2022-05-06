@@ -9,13 +9,16 @@ Clone the repository on your computer.
 
 Set your virtual environment under python 3.10
 
-Create the virtual environment and install the dependencies
+Create the virtual environment and install the dependencies:
+
 `pipenv install` 
 
-Activate the virtual environment
+Activate the virtual environment:
+
 `pipenv shell`
 
-Install the necessary libraries in the virtual environnement
+Install the necessary libraries in the virtual environnement:
+
 `pipenv install -r requirements.txt`
 
 
