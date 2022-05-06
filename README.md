@@ -22,11 +22,13 @@ Install the necessary libraries in the virtual environnement
 ## Usage
 
 Run the code:
+
 `python3 main.py`
 
 ## Generate a report
 
 Generate a flake8 report:
+
 `flake8 --format=html --htmldir=flake-report`
 
 ## License
