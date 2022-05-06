@@ -219,6 +219,8 @@ class UserManager:
                 tournament.date = tournament_found["date"]
                 tournament.description = tournament_found["description"]
                 tournament.time_control = tournament_found["time_control"]
+                tournament.number_of_players = tournament_found["number_of_players"]
+                tournament.number_of_rounds = tournament_found["number_of_rounds"]
 
                 tournament_players = {}
                 if len(tournament_found["players"]) > 0:

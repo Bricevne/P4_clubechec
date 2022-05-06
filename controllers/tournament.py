@@ -201,18 +201,11 @@ class TournamentManager:
             )
             self.get_new_total_scores(match_result)
 
-            # print(self.tournament.players)
-            # for v in self.tournament.players.values():
-            # print(v.total_score)
-
             new_round.add_match(match_result)
-            # print(match_result.players_score)
             match_number += 1
 
         new_round.set_ending_time()
         self.tournament.add_round(new_round)
-        # print(new_round.match)
-        # print(self.tournament.rounds)
 
     @dash(40)
     def start_new_match(self, match_number, first_player, second_player) -> None:
@@ -283,6 +276,7 @@ class TournamentManager:
 
             elif round_option == 2:
                 system("clear")
+                self.update_ranking()
                 self.display_by_rank()
             elif round_option == 3:
                 return False
