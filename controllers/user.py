@@ -251,7 +251,6 @@ class UserManager:
 
                         tournament_rounds.append(round)
                     tournament.rounds = tournament_rounds
-                print(len(tournament.rounds))
                 return tournament
             else:
                 print("not found")
