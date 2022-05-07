@@ -9,49 +9,93 @@ class TournamentView:
         pass
 
     def get_view_name(self) -> str:
-        """Display name input."""
+        """Return name for input.
+
+        Returns:
+            str: Information for name
+        """
         return "Name: "
 
     def get_view_place(self) -> str:
-        """Display place input."""
+        """Return place for input.
+
+        Returns:
+            str: Information for place
+        """
         return "Place: "
 
     def get_view_date(self) -> str:
-        """Display date input."""
+        """Return date for input.
+
+        Returns:
+            str: Information for date
+        """
         return "Date: "
 
     def get_view_time_control(self) -> str:
-        """Display time control input."""
+        """Return time control for input.
+
+        Returns:
+            str: Information for time control
+        """
         return "Time_control: "
 
     def get_view_description(self) -> str:
-        """Display description input."""
+        """Return description for input.
+
+        Returns:
+            str: Information for description
+        """
         return "Description: "
 
     def get_view_round(self) -> str:
-        """Display round input."""
+        """Return number of rounds for input.
+
+        Returns:
+            str: Information for number of rounds
+        """
         return "Number of rounds: "
 
     def get_view_players(self) -> str:
-        """Display number of players input."""
+        """Return number of players for input.
+
+        Returns:
+            str: Information for number of players
+        """
         return "Number of players: "
 
-    def get_wrong_player_number(self, number_of_players) -> None:
-        """Display a message when not enough players are available for the tournament."""
+    def get_wrong_player_number(self, number_of_players: int) -> None:
+        """Print a message when not enough players are available for the tournament.
+
+        Args:
+            number_of_players (int): number of players needed in the database to start the tournament
+        """
         print(
             f"You need at least {number_of_players} players to choose from for a tournament."
         )
 
     def get_player(self) -> str:
-        """Display a message for selecting a player."""
+        """Return a message for selecting a player.
+
+        Returns:
+            str: Message to ask the user for a player's id
+        """
         return "Please select a player's id to add him to the tournament : "
 
     def get_wrong_id(self) -> str:
-        """Display a message when a player is already selected or does not exist."""
+        """Return a message when a player is already selected or does not exist.
+
+        Returns:
+            str: Unvalid id message
+        """
         return "Please choose a valid id from the list. "
 
     def get_tournament_options(self) -> str:
-        """Display tournament menu."""
+        """Return the tournament menu.
+
+        Returns:
+            str: Tournament menu
+        """
         menu_options = "\n\
         1. Start tournament\n\
         2. Modify round numbers\n\
@@ -60,7 +104,11 @@ class TournamentView:
         return menu_options
 
     def get_round_options(self) -> str:
-        """Display round menu."""
+        """Return round menu.
+
+        Returns:
+            str: Round menu
+        """
         menu_options = "\n\
         1. New round\n\
         2. Show ranking\n\
@@ -68,35 +116,47 @@ class TournamentView:
         return menu_options
 
     def get_wrong_option(self) -> None:
-        """Display error message."""
+        """Print an error message when the user picks a wrong option."""
         error_message = "Oops! That was no valid option. Try again."
         print(error_message)
 
     def get_wrong_round_number(self) -> None:
-        """Display error message."""
+        """Print an error message when the user picks a letter instead of a number."""
         error_message = "Oops! This is not a number!"
         print(error_message)
 
     def get_view_round_name(self) -> str:
-        """Display round name."""
+        """Return a message to ask the user the current round's name.
+
+        Returns:
+            str: Information for round name
+        """
         return "Round name: "
 
     def get_view_match(self, match_counter: int) -> None:
-        """Display match result."""
+        """Print match results message.
+
+        Args:
+            match_counter (int): Count for the number of matches of a round
+        """
         message = f"Match {match_counter} | results\n"
         print(message)
 
     def get_wrong_score_type(self) -> None:
-        """Display."""
+        """Print message when the user inserts a wrong score."""
         message = "You have to give a score (Lose : 0, Win : 1, Draw : 0.5)"
         print(message)
 
-    def show_ranking(self, player):
-        """Display the message format for rankings."""
+    def show_ranking(self, player: object) -> None:
+        """Print the message format for rankings.
+
+        Args:
+            player (object): Player instance
+        """
         message = f"{player.rank} : {player.name} {player.surname} - Total score : {player.total_score}"
         print(message)
 
     def display_message_end_tournament(self) -> None:
-        """Diaplsy."""
+        """Print a message when the tournament ends."""
         message = "The tournament ended ! The final ranking is: "
         print(message)
