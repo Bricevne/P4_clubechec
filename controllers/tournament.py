@@ -7,9 +7,8 @@ from models.player import Player
 
 from views.tournament import TournamentView
 
-from typing import Callable
+from controllers.menu import MenuManager
 
-# from controllers.menu import MenuManager
 from os import system
 
 
@@ -20,7 +19,7 @@ class TournamentManager:
         """Initialize class."""
         self.tournament = Tournament()
         self.tournament_view = TournamentView()
-        # self.menu_view = MenuManager()
+        self.menu_manager = MenuManager()
 
     @staticmethod
     def dash(n):
@@ -74,29 +73,6 @@ class TournamentManager:
         self.get_tournament_time_control()
         self.get_tournament_description()
         system("clear")
-
-    def select_option(self, number_of_options: int, get_view_options: Callable) -> int:
-        """Ask the user to pick from the available options.
-
-        Args:
-            number_of_options (int): Number of options available to pick from
-            get_view_options (Callable): Method from the tournament view to display options
-
-        Returns:
-            int: Option picked
-        """
-        option = 0
-        while option not in range(1, number_of_options + 1):
-            try:
-                option = int(input(get_view_options()))
-            except ValueError:
-                system("clear")
-                self.tournament_view.get_wrong_option()
-            else:
-                if option not in range(1, number_of_options + 1):
-                    system("clear")
-                    self.tournament_view.get_wrong_option()
-        return option
 
     def set_tournament_information(self, available_players: dict) -> bool:
         """Check if there are enough players for the current tournament (Default: 8).
@@ -335,9 +311,9 @@ class TournamentManager:
             len(self.tournament.rounds) < self.tournament.number_of_rounds
             and round_running
         ):
-            round_option = self.select_option(
+            round_option = self.menu_manager.select_menu_option(
                 3,
-                self.tournament_view.get_round_options,
+                self.menu_manager.menu_view.get_round_options,
             )
             if round_option == 1:
                 system("clear")
@@ -398,9 +374,9 @@ class TournamentManager:
             if len(self.tournament.players) != 0:
                 tournament_option = 1
             else:
-                tournament_option = self.select_option(
+                tournament_option = self.menu_manager.select_menu_option(
                     4,
-                    self.tournament_view.get_tournament_options,
+                    self.menu_manager.menu_view.get_tournament_options,
                 )
             if tournament_option == 1:
                 if len(self.tournament.players) == 0:

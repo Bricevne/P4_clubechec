@@ -90,36 +90,6 @@ class TournamentView:
         """
         return "Please choose a valid id from the list. "
 
-    def get_tournament_options(self) -> str:
-        """Return the tournament menu.
-
-        Returns:
-            str: Tournament menu
-        """
-        menu_options = "\n\
-        1. Start tournament\n\
-        2. Modify round numbers\n\
-        3. Modify number of players\n\
-        4. Quit\n"
-        return menu_options
-
-    def get_round_options(self) -> str:
-        """Return round menu.
-
-        Returns:
-            str: Round menu
-        """
-        menu_options = "\n\
-        1. New round\n\
-        2. Show ranking\n\
-        3. Quit\n"
-        return menu_options
-
-    def get_wrong_option(self) -> None:
-        """Print an error message when the user picks a wrong option."""
-        error_message = "Oops! That was no valid option. Try again."
-        print(error_message)
-
     def get_wrong_round_number(self) -> None:
         """Print an error message when the user picks a letter instead of a number."""
         error_message = "Oops! This is not a number!"

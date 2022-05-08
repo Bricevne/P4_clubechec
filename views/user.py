@@ -68,10 +68,6 @@ class UserView:
         """
         return "Do you confirm? (y/n) : "
 
-    def get_wrong_option(self) -> None:
-        """Print a message when the user picks a wrong option."""
-        print("Oops! That was no valid option, try again.")
-
     def display_player_confirmation(self) -> None:
         """Print a confirmation when a player has been successfully added."""
         print("The player has successfully been added!")
@@ -86,19 +82,6 @@ class UserView:
             f"id: {player.doc_id}   player: {player['name']} {player['surname']}   "
             f"gender: {player['gender']}   elo: {player['elo']}"
         )
-
-    def get_submenu(self) -> str:
-        """Return submenu.
-
-        Returns:
-            str: Message to display the submenu
-        """
-        menu_options = "\n\
-        1. Modify player information\n\
-        2. Display by surname\n\
-        3. Display by elo\n\
-        4. Back to menu\n"
-        return menu_options
 
     def get_player_by_id(self) -> str:
         """Return player's id message.
@@ -133,17 +116,6 @@ class UserView:
         message = "This is not an ID."
         print(message)
 
-    def get_import_menu(self) -> str:
-        """Return a message with a menu.
-
-        Returns:
-            str: Message of options when importing a tournament
-        """
-        menu_options = "\n\
-        1. Select a tournament\n\
-        2. Back to menu\n"
-        return menu_options
-
     def display_tournaments(self, tournament: dict) -> None:
         """Print tournaments' information.
 
@@ -163,17 +135,3 @@ class UserView:
         """
         message = "Select the tournament's id: "
         return message
-
-    def get_tournament_information_menu(self) -> str:
-        """Return a message with a menu.
-
-        Returns:
-            str: Message of options when selecting a tournament
-        """
-        menu_options = "\n\
-        1. Display player (rank)\n\
-        2. Display player (alphabet)\n\
-        3. Display rounds\n\
-        4. Display matches\n\
-        5. Back to menu\n"
-        return menu_options

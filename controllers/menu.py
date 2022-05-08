@@ -12,7 +12,7 @@ class MenuManager:
         """Class initializer."""
         self.menu_view = MenuView()
 
-    def select_menu_option(self, number_of_options) -> int:
+    def select_menu_option(self, number_of_options, get_menu) -> int:
         """
         Ask for User's choice in a list of options.
 
@@ -21,7 +21,7 @@ class MenuManager:
         menu_option = 0
         while menu_option not in range(1, number_of_options + 1):
             try:
-                menu_option = int(input(self.menu_view.get_menu()))
+                menu_option = int(input(get_menu()))
             except ValueError:
                 system("clear")
                 self.menu_view.get_wrong_choice()

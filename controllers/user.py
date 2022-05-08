@@ -146,27 +146,6 @@ class UserManager:
         for player in players:
             self.user_view.display_sorted_players(player)
 
-    def select_menu_option(self, number_of_options: int, get_menu: Callable) -> int:
-        """Ask the user to pick from the available options.
-
-        Args:
-            number_of_options (int): Number of options available to pick from
-            get_menu (Callable): Method from the User view to display options
-
-        Returns:
-            int: Option picked
-        """
-        menu_option = 0
-        while menu_option not in range(1, number_of_options + 1):
-            try:
-                menu_option = int(input(get_menu()))
-            except ValueError:
-                self.user_view.get_wrong_option()
-            else:
-                if menu_option not in range(1, number_of_options + 1):
-                    self.user_view.get_wrong_option()
-        return menu_option
-
     def display_players(self, player_db: object) -> None:
         """Dispatch the action requested by the user.
 
@@ -177,7 +156,9 @@ class UserManager:
         menu_running = True
 
         while menu_running:
-            user_choice = self.select_menu_option(4, self.user_view.get_submenu)
+            user_choice = self.menu_manager.select_menu_option(
+                4, self.menu_manager.menu_view.get_player_submenu
+            )
 
             if user_choice == 1:
 
@@ -265,7 +246,7 @@ class UserManager:
             for tournament in tournament_db.tournaments:
                 self.user_view.display_tournaments(tournament)
 
-            user_choice = self.select_menu_option(2, get_menu)
+            user_choice = self.menu_manager.select_menu_option(2, get_menu)
 
             if user_choice == 1:
                 tournament = self.recover_tournament(tournament_db)
@@ -360,7 +341,7 @@ class UserManager:
         menu_running = True
 
         while menu_running:
-            user_choice = self.select_menu_option(5, get_menu)
+            user_choice = self.menu_manager.select_menu_option(5, get_menu)
 
             if user_choice == 1:
                 self.tournament_manager.display_by_rank()
@@ -388,7 +369,9 @@ class UserManager:
 
         while running:
             self.tournament_manager.tournament = Tournament()
-            user_choice = self.menu_manager.select_menu_option(6)
+            user_choice = self.menu_manager.select_menu_option(
+                6, self.menu_manager.menu_view.get_menu
+            )
 
             if user_choice == 1:
                 self.tournament_manager.create_tournament(
@@ -407,7 +390,7 @@ class UserManager:
             elif user_choice == 4:
                 tournament_db = self.db_tournament
                 imported_tournament = self.import_tournament(
-                    tournament_db, self.user_view.get_import_menu
+                    tournament_db, self.menu_manager.menu_view.get_import_menu
                 )
                 if imported_tournament:
                     self.tournament_manager.tournament = imported_tournament
@@ -418,12 +401,12 @@ class UserManager:
             elif user_choice == 5:
                 tournament_db = self.db_tournament
                 found_tournament = self.import_tournament(
-                    tournament_db, self.user_view.get_import_menu
+                    tournament_db, self.menu_manager.menu_view.get_import_menu
                 )
                 if found_tournament:
                     self.tournament_manager.tournament = found_tournament
                     self.display_tournament_information(
-                        self.user_view.get_tournament_information_menu,
+                        self.menu_manager.menu_view.get_tournament_information_menu,
                     )
             elif user_choice == 6:
                 running = False
