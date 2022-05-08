@@ -1,6 +1,5 @@
 """User manager class."""
 
-from email.mime import application
 from models.player import Player
 from views.user import UserView
 from models.match import Match
