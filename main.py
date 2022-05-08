@@ -11,10 +11,10 @@ def main():
     while running:
 
         application = Application()
-        user_choice = application.menu_manager.select_main_menu_option(5)
+        user_choice = application.menu_manager.select_menu_option(5)
 
         if user_choice == 1:
-            application.tournament_manager.start_tournament_info(application)
+            application.tournament_manager.create_tournament(application)
         elif user_choice == 2:
             added_player = application.user_manager.add_player()
             if added_player is not None:
@@ -27,7 +27,7 @@ def main():
 
         elif user_choice == 4:
             tournament_db = application.db_tournament
-            imported_tournament = application.user_manager.select_tournaments(
+            imported_tournament = application.user_manager.import_tournament(
                 tournament_db
             )
             if imported_tournament:

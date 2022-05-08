@@ -8,7 +8,7 @@ from controllers.db import DbPlayer, DbTournament
 
 
 class Application:
-    """Application class."""
+    """Application class containing all controllers."""
 
     def __init__(self) -> None:
         """Initialize class."""

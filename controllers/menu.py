@@ -10,19 +10,23 @@ class MenuManager:
 
     def __init__(self) -> None:
         """Class initializer."""
-        self.display = MenuView()
+        self.menu_view = MenuView()
 
-    def select_main_menu_option(self, number_of_options) -> int:
-        """Ask for User choice."""
+    def select_menu_option(self, number_of_options) -> int:
+        """
+        Ask for User's choice in a list of options.
+
+        If the user's input is wrong, display an error message until the input is right.
+        """
         menu_option = 0
         while menu_option not in range(1, number_of_options + 1):
             try:
-                menu_option = int(input(self.display.get_menu()))
+                menu_option = int(input(self.menu_view.get_menu()))
             except ValueError:
                 system("clear")
-                self.display.get_wrong_choice()
+                self.menu_view.get_wrong_choice()
             else:
                 system("clear")
                 if menu_option not in range(1, number_of_options + 1):
-                    self.display.get_wrong_choice()
+                    self.menu_view.get_wrong_choice()
         return menu_option
