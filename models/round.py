@@ -1,7 +1,6 @@
 """Turn model."""
 
-from datetime import date
-import time
+from datetime import datetime
 
 
 class Round:
@@ -24,15 +23,11 @@ class Round:
 
     def set_starting_time(self) -> None:
         """Set the round's starting time."""
-        today_time = time.time()
-        date_from_current_time = date.fromtimestamp(today_time)
-        self.start_time = date_from_current_time.ctime()
+        self.start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def set_ending_time(self) -> None:
         """Set the round's ending time."""
-        today_time = time.time()
-        date_from_current_time = date.fromtimestamp(today_time)
-        self.end_time = date_from_current_time.ctime()
+        self.end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def add_match(self, match: object) -> None:
         """Add a match to the round.
