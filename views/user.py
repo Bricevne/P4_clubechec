@@ -163,3 +163,15 @@ class UserView:
         """
         message = "Select the tournament's id: "
         return message
+
+    def get_tournament_information_menu(self) -> str:
+        """Return a message with a menu.
+
+        Returns:
+            str: Message of options when selecting a tournament
+        """
+        menu_options = "\n\
+        1. Display rounds\n\
+        2. Display matches\n\
+        3. Back to menu\n"
+        return menu_options

@@ -1,5 +1,6 @@
 """User manager class."""
 
+from email.mime import application
 from models.player import Player
 from views.user import UserView
 from models.match import Match
@@ -236,11 +237,14 @@ class UserManager:
             available_players[player_found.doc_id] = player
         return available_players
 
-    def import_tournament(self, tournament_db: object) -> dict or None:
+    def import_tournament(
+        self, tournament_db: object, get_menu: Callable
+    ) -> dict or None:
         """Dispatch the action selected by the user (recover a tournament, or go back to previous menu).
 
         Args:
             tournament_db (object): Tournament database instance
+            get_menu (Callable): Function displaying menu
 
         Returns:
             Dict or None: Dictionnary if the user import a tournament, none otherwise
@@ -252,7 +256,7 @@ class UserManager:
             for tournament in tournament_db.tournaments:
                 self.user_view.display_tournaments(tournament)
 
-            user_choice = self.select_menu_option(2, self.user_view.get_import_menu)
+            user_choice = self.select_menu_option(2, get_menu)
 
             if user_choice == 1:
                 tournament = self.recover_tournament(tournament_db)
@@ -276,48 +280,86 @@ class UserManager:
             self.user_view.display_wrong_id_type()
         else:
             tournament_found = db_tournament.search_tournament_by_id(tournament_id)
+            return self.unserialize_tournament(tournament_found)
 
-            if tournament_found:
-                tournament = Tournament()
-                tournament.name = tournament_found["name"]
-                tournament.place = tournament_found["place"]
-                tournament.date = tournament_found["date"]
-                tournament.description = tournament_found["description"]
-                tournament.time_control = tournament_found["time_control"]
-                tournament.number_of_players = tournament_found["number_of_players"]
-                tournament.number_of_rounds = tournament_found["number_of_rounds"]
+    def unserialize_tournament(self, tournament_found: dict) -> object or None:
+        """Unserialize a tournament in the database.
 
-                tournament_players = {}
-                if len(tournament_found["players"]) > 0:
-                    for id, player_found in tournament_found["players"].items():
-                        player = Player(
-                            player_found["name"],
-                            player_found["surname"],
-                            player_found["birthdate"],
-                            player_found["gender"],
-                            player_found["elo"],
-                        )
-                        player.total_score = player_found["total_score"]
-                        player.rank = player_found["rank"]
-                        tournament_players[id] = player
-                tournament.players = tournament_players
+        Args:
+            tournament_found (dict): A tournament
 
-                tournament_rounds = []
-                if len(tournament_found["rounds"]) > 0:
+        Returns:
+            object or None: A tournament instance if a tournament is found, none otherwise
+        """
+        if tournament_found:
+            tournament = Tournament()
+            tournament.name = tournament_found["name"]
+            tournament.place = tournament_found["place"]
+            tournament.date = tournament_found["date"]
+            tournament.description = tournament_found["description"]
+            tournament.time_control = tournament_found["time_control"]
+            tournament.number_of_players = tournament_found["number_of_players"]
+            tournament.number_of_rounds = tournament_found["number_of_rounds"]
 
-                    for rounds_found in tournament_found["rounds"]:
-                        round = Round()
-                        round.name = rounds_found["name"]
-                        round.start_time = rounds_found["start_time"]
-                        round.end_time = rounds_found["end_time"]
+            tournament_players = {}
+            if len(tournament_found["players"]) > 0:
+                for id, player_found in tournament_found["players"].items():
+                    player = Player(
+                        player_found["name"],
+                        player_found["surname"],
+                        player_found["birthdate"],
+                        player_found["gender"],
+                        player_found["elo"],
+                    )
+                    player.total_score = player_found["total_score"]
+                    player.rank = player_found["rank"]
+                    tournament_players[id] = player
+            tournament.players = tournament_players
 
-                        for match_found in rounds_found["match"]:
-                            match = Match(match_found["players_score"])
+            tournament_rounds = []
+            if len(tournament_found["rounds"]) > 0:
 
-                            round.match.append(match)
+                for rounds_found in tournament_found["rounds"]:
+                    round = Round()
+                    round.name = rounds_found["name"]
+                    round.start_time = rounds_found["start_time"]
+                    round.end_time = rounds_found["end_time"]
 
-                        tournament_rounds.append(round)
-                    tournament.rounds = tournament_rounds
-                return tournament
-            else:
-                print("not found")
+                    for match_found in rounds_found["match"]:
+                        match = Match(match_found["players_score"])
+
+                        round.match.append(match)
+
+                    tournament_rounds.append(round)
+                tournament.rounds = tournament_rounds
+            return tournament
+        else:
+            print("not found")
+
+    def display_tournament_information(
+        self, application: object, get_menu: Callable
+    ) -> None:
+        """
+        Dispatch the action selected by the user.
+
+        Options: isplay list of rounds, display list of matches, go back to previous menu.
+
+        Args:
+            application (object): Controller application instance
+            get_menu (Callable): Function displaying menu
+        """
+        user_choice = 0
+        menu_running = True
+
+        while menu_running:
+            user_choice = self.select_menu_option(3, get_menu)
+
+            if user_choice == 1:
+                application.tournament_manager.display_rounds()
+
+            elif user_choice == 2:
+                application.tournament_manager.display_matches()
+
+            elif user_choice == 3:
+                system("clear")
+                menu_running = False

@@ -313,6 +313,7 @@ class TournamentManager:
 
     def display_by_rank(self) -> None:
         """Display the players by rank."""
+        system("clear")
         self.update_ranking()
         sorted_players = self.tournament.sort_by_score_dict()
         for player in sorted_players.values():
@@ -470,3 +471,25 @@ class TournamentManager:
         tournament_to_serialize.description = self.tournament.description
 
         self.update_tournament(application, tournament_to_serialize, tournament_id)
+
+    def display_rounds(self) -> None:
+        """Display all the rounds done in the tournament."""
+        for round in self.tournament.rounds:
+            print(
+                f"Name: {round.name}   Starting time: {round.start_time}   Ending time: {round.end_time}"
+            )
+
+    def display_matches(self) -> None:
+        """Display all the rounds done in the tournament."""
+        for round in self.tournament.rounds:
+            print(f"\nName: {round.name}")
+            for match in round.match:
+                first_player = self.tournament.players[match.players_score[0][0]]
+                second_player = self.tournament.players[match.players_score[1][0]]
+                first_player_score = match.players_score[0][1]
+                second_player_score = match.players_score[1][1]
+
+                print(
+                    f"{first_player.name} {first_player.surname} : {first_player_score} - {second_player_score} : "
+                    f"{second_player.name} {second_player.surname}"
+                )
