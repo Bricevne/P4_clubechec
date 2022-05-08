@@ -109,6 +109,23 @@ class Tournament:
         sorted_players = {k: v for k, v in self.sort_by_elo_list()}
         return sorted_players
 
+    def sort_by_surname_list(self) -> tuple:
+        """Sort players instances by surname.
+
+        Returns:
+            tuple: A tuple containing tuples of a player's id and player instance sorted by elo
+        """
+        return sorted(self.players.items(), key=lambda player: player[1].surname)
+
+    def sort_by_surname_dict(self) -> tuple:
+        """Sort players instances by surname.
+
+        Returns:
+            tuple: A tuple containing tuples of a player's id and player instance sorted by elo
+        """
+        sorted_players = {k: v for k, v in self.sort_by_surname_list()}
+        return sorted_players
+
     def sort_by_score_list(self) -> tuple:
         """Sort players instances by decreasing total score.
 
@@ -151,10 +168,10 @@ class Tournament:
             sorted_players = self.sort_by_score_list()
 
             matches = []
-            for number in range(0, len(sorted_players) // 2):
+            for number in range(0, len(sorted_players), 2):
                 new_match = (
                     sorted_players[number],
-                    sorted_players[number + len(sorted_players) // 2],
+                    sorted_players[number + 1],
                 )
                 matches.append(new_match)
             return matches

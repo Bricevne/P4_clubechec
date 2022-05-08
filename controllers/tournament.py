@@ -1,10 +1,12 @@
 """Tournament controller."""
 
 from models.tournament import Tournament
-from views.tournament import TournamentView
 from models.round import Round
 from models.match import Match
 from models.player import Player
+
+from views.tournament import TournamentView
+
 from typing import Callable
 
 # from controllers.menu import MenuManager
@@ -319,7 +321,7 @@ class TournamentManager:
         for player in sorted_players.values():
             self.tournament_view.show_ranking(player)
 
-    def start_tournament(self, application: object) -> bool:
+    def start_tournament(self, db_tournament: object) -> bool:
         """Start tournament.
 
         Args:
@@ -340,7 +342,7 @@ class TournamentManager:
             if round_option == 1:
                 system("clear")
                 self.start_new_round()
-                self.update_db(application)
+                self.update_db(db_tournament)
                 self.update_ranking()
 
             elif round_option == 2:
@@ -349,24 +351,45 @@ class TournamentManager:
                 self.display_by_rank()
             elif round_option == 3:
                 return False
-
         self.tournament_view.display_message_end_tournament()
         self.display_by_rank()
         return True
 
-    def create_tournament(self, application: object) -> None:
+    def get_all_players(self, player_db: object) -> dict:
+        """Return all players in the database.
+
+        Args:
+            player_db (object): Player database instance
+
+        Returns:
+            dict: Dictionnary {id : player instance}
+        """
+        available_players = {}
+        for player_found in player_db.players:
+            player = Player(
+                player_found["name"],
+                player_found["surname"],
+                player_found["birthdate"],
+                player_found["gender"],
+                player_found["elo"],
+            )
+
+            available_players[player_found.doc_id] = player
+        return available_players
+
+    def create_tournament(self, db_player: object, db_tournament: object) -> None:
         """Create a new tournament.
 
         Args:
             application (object): Controller application instance
         """
         tournament_running = True
-        players = application.user_manager.get_all_players(application.db_player)
+        players = self.get_all_players(db_player)
 
         # If there is already a time_control defined, tournament's information has already been set.
         if self.tournament.time_control == "":
             enough_players = self.set_tournament_information(players)
-            application.db_tournament.add_tournament_db(self.tournament)
+            db_tournament.add_tournament_db(self.tournament)
             if not enough_players:
                 tournament_running = False
 
@@ -382,24 +405,24 @@ class TournamentManager:
             if tournament_option == 1:
                 if len(self.tournament.players) == 0:
                     self.get_participating_players(players)
-                    self.update_db(application)
+                    self.update_db(db_tournament)
                 else:
-                    self.start_tournament(application)
+                    self.start_tournament(db_tournament)
                     tournament_running = False
 
             elif tournament_option == 2:
                 system("clear")
                 self.get_round_numbers()
-                self.update_db(application)
+                self.update_db(db_tournament)
             elif tournament_option == 3:
                 system("clear")
                 self.get_player_numbers()
-                self.update_db(application)
+                self.update_db(db_tournament)
             elif tournament_option == 4:
                 tournament_running = False
 
     def get_tournament_db_id(
-        self, application: object, tournament_description: str
+        self, db_tournament: object, tournament_description: str
     ) -> int or bool:
         """Recover the tournament's id thanks to its description in the database.
 
@@ -410,13 +433,13 @@ class TournamentManager:
         Returns:
             int or bool: Tournament id if found, False if not
         """
-        tournament_id = application.db_tournament.search_tournament_id_by_description(
+        tournament_id = db_tournament.search_tournament_id_by_description(
             tournament_description
         )
         return tournament_id
 
     def update_tournament(
-        self, application: object, tournament: object, tournament_id: int
+        self, db_tournament: object, tournament: object, tournament_id: int
     ) -> None:
         """Update an existing tournament in the database.
 
@@ -425,22 +448,22 @@ class TournamentManager:
             tournament (object): Tournament instance
             tournament_id (int): Tournament id
         """
-        application.db_tournament.update_tournament_db(tournament, tournament_id)
+        db_tournament.update_tournament_db(tournament, tournament_id)
 
-    def update_db(self, application: object) -> None:
+    def update_db(self, db_tournament: object) -> None:
         """Serialize players, rounds and matches in a new tournament instance, and update it in the database.
 
         Args:
             application (object): Controller application instance
         """
         tournament_id = self.get_tournament_db_id(
-            application, self.tournament.description
+            db_tournament, self.tournament.description
         )
 
         players_serialized = {}
         if len(self.tournament.players) > 0:
             for id, player in self.tournament.players.items():
-                serialized_player = Player.serialize_player_tournament(player)
+                serialized_player = player.serialize_player_tournament()
                 players_serialized[id] = serialized_player
 
         rounds_serialized = []
@@ -452,11 +475,11 @@ class TournamentManager:
                 new_round.end_time = round.end_time
 
                 for match in round.match:
-                    serialized_match = Match.serialize_match(match)
+                    serialized_match = match.serialize_match()
 
                     new_round.match.append(serialized_match)
 
-                serialized_round = Round.serialize_round(new_round)
+                serialized_round = new_round.serialize_round()
                 rounds_serialized.append(serialized_round)
 
         tournament_to_serialize = Tournament()
@@ -470,7 +493,7 @@ class TournamentManager:
         tournament_to_serialize.time_control = self.tournament.time_control
         tournament_to_serialize.description = self.tournament.description
 
-        self.update_tournament(application, tournament_to_serialize, tournament_id)
+        self.update_tournament(db_tournament, tournament_to_serialize, tournament_id)
 
     def display_rounds(self) -> None:
         """Display all the rounds done in the tournament."""
@@ -482,10 +505,10 @@ class TournamentManager:
     def display_matches(self) -> None:
         """Display all the rounds done in the tournament."""
         for round in self.tournament.rounds:
-            print(f"\nName: {round.name}")
+            print(f"\n{round.name}")
             for match in round.match:
-                first_player = self.tournament.players[match.players_score[0][0]]
-                second_player = self.tournament.players[match.players_score[1][0]]
+                first_player = self.tournament.players[str(match.players_score[0][0])]
+                second_player = self.tournament.players[str(match.players_score[1][0])]
                 first_player_score = match.players_score[0][1]
                 second_player_score = match.players_score[1][1]
 
@@ -493,3 +516,10 @@ class TournamentManager:
                     f"{first_player.name} {first_player.surname} : {first_player_score} - {second_player_score} : "
                     f"{second_player.name} {second_player.surname}"
                 )
+
+    def display_by_surname(self) -> None:
+        """Display a tournament's players by surname."""
+        system("clear")
+        sorted_players = self.tournament.sort_by_surname_dict()
+        for player in sorted_players.values():
+            self.tournament_view.show_ranking(player)

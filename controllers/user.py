@@ -1,13 +1,19 @@
 """User manager class."""
 
+from controllers.tournament import TournamentManager
+from controllers.menu import MenuManager
+from controllers.db import DbPlayer, DbTournament
+
+from models.tournament import Tournament
 from models.player import Player
-from views.user import UserView
 from models.match import Match
 from models.round import Round
 
+from views.user import UserView
+
+
 from os import system
 import re
-from models.tournament import Tournament
 from typing import Callable
 
 
@@ -17,6 +23,10 @@ class UserManager:
     def __init__(self) -> None:
         """Class initializer."""
         self.user_view = UserView()
+        self.menu_manager = MenuManager()
+        self.tournament_manager = TournamentManager()
+        self.db_player = DbPlayer()
+        self.db_tournament = DbTournament()
 
     def get_good_elo(self) -> int:
         """Ask for the player's elo and check if it is an integer.
@@ -313,6 +323,7 @@ class UserManager:
                     player.total_score = player_found["total_score"]
                     player.rank = player_found["rank"]
                     tournament_players[id] = player
+
             tournament.players = tournament_players
 
             tournament_rounds = []
@@ -335,30 +346,84 @@ class UserManager:
         else:
             print("not found")
 
-    def display_tournament_information(
-        self, application: object, get_menu: Callable
-    ) -> None:
+    def display_tournament_information(self, get_menu: Callable) -> None:
+        # MOVE TO TOURNAMENT CONTROLLER
         """
         Dispatch the action selected by the user.
 
         Options: isplay list of rounds, display list of matches, go back to previous menu.
 
         Args:
-            application (object): Controller application instance
             get_menu (Callable): Function displaying menu
         """
         user_choice = 0
         menu_running = True
 
         while menu_running:
-            user_choice = self.select_menu_option(3, get_menu)
+            user_choice = self.select_menu_option(5, get_menu)
 
             if user_choice == 1:
-                application.tournament_manager.display_rounds()
+                self.tournament_manager.display_by_rank()
 
+            if user_choice == 2:
+                self.tournament_manager.display_by_surname()
+
+            elif user_choice == 3:
+                self.tournament_manager.display_rounds()
+
+            elif user_choice == 4:
+                self.tournament_manager.display_matches()
+
+            elif user_choice == 5:
+                system("clear")
+                menu_running = False
+
+    def start_program(self) -> None:
+        """Start program.
+
+        Args:
+            application (object): Application controller instance
+        """
+        running = True
+
+        while running:
+            self.tournament_manager.tournament = Tournament()
+            user_choice = self.menu_manager.select_menu_option(6)
+
+            if user_choice == 1:
+                self.tournament_manager.create_tournament(
+                    self.db_player, self.db_tournament
+                )
             elif user_choice == 2:
-                application.tournament_manager.display_matches()
+                added_player = self.add_player()
+                if added_player is not None:
+                    self.db_player.add_player_db(added_player)
 
             elif user_choice == 3:
                 system("clear")
-                menu_running = False
+                player_db = self.db_player
+                self.display_players(player_db)
+
+            elif user_choice == 4:
+                tournament_db = self.db_tournament
+                imported_tournament = self.import_tournament(
+                    tournament_db, self.user_view.get_import_menu
+                )
+                if imported_tournament:
+                    self.tournament_manager.tournament = imported_tournament
+                    self.tournament_manager.create_tournament(
+                        self.db_player, self.db_tournament
+                    )
+
+            elif user_choice == 5:
+                tournament_db = self.db_tournament
+                found_tournament = self.import_tournament(
+                    tournament_db, self.user_view.get_import_menu
+                )
+                if found_tournament:
+                    self.tournament_manager.tournament = found_tournament
+                    self.display_tournament_information(
+                        self.user_view.get_tournament_information_menu,
+                    )
+            elif user_choice == 6:
+                running = False

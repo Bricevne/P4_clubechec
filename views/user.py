@@ -171,7 +171,9 @@ class UserView:
             str: Message of options when selecting a tournament
         """
         menu_options = "\n\
-        1. Display rounds\n\
-        2. Display matches\n\
-        3. Back to menu\n"
+        1. Display player (rank)\n\
+        2. Display player (alphabet)\n\
+        3. Display rounds\n\
+        4. Display matches\n\
+        5. Back to menu\n"
         return menu_options
