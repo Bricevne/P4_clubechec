@@ -8,11 +8,6 @@ class MenuView:
         """Initialize class."""
         pass
 
-    def display_welcome(self) -> None:
-        """Print a message welcoming the user."""
-        message = "Welcome to the event! Please choose an option."
-        print(message)
-
     def get_menu(self) -> str:
         """Return main menu.
 
@@ -27,11 +22,6 @@ class MenuView:
         5. List of Tournaments\n\
         6. Quit\n"
         return menu_options
-
-    def get_wrong_choice(self) -> None:
-        """Print an error message when the user picks a wrong option."""
-        error_message = "Oops! That was no valid option. Try again."
-        print(error_message)
 
     def get_tournament_information_menu(self) -> str:
         """Return a message with a menu.
@@ -95,3 +85,8 @@ class MenuView:
         2. Show ranking\n\
         3. Quit\n"
         return menu_options
+
+    def get_wrong_choice(self) -> None:
+        """Print an error message when the user picks a wrong option."""
+        error_message = "Oops! That was no valid option. Try again."
+        print(error_message)

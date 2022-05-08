@@ -365,8 +365,9 @@ class UserManager:
         Args:
             application (object): Application controller instance
         """
+        system("clear")
+        self.user_view.display_welcome()
         running = True
-
         while running:
             self.tournament_manager.tournament = Tournament()
             user_choice = self.menu_manager.select_menu_option(

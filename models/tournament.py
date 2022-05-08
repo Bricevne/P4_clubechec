@@ -1,5 +1,7 @@
 """Tournament model."""
 
+from models.round import Round
+
 
 class Tournament:
     """Class managing tournaments."""
@@ -177,7 +179,7 @@ class Tournament:
             return matches
 
     def serialize_tournament(self) -> dict:
-        """Serialize a tournament for the database.
+        """Serialize a tournament for the database when ites attributes don't contain objects.
 
         Returns:
             dict: a dictionnary of tournament instances' attributes
@@ -194,3 +196,44 @@ class Tournament:
             "description": self.description,
         }
         return serialized_tournament
+
+    def serialize_tournament_attributes(self) -> object:
+        """Serialize all tournaments attributes containing objects.
+
+        Returns:
+            object: A tournament instance
+        """
+        players_serialized = {}
+        if len(self.players) > 0:
+            for id, player in self.players.items():
+                serialized_player = player.serialize_player_tournament()
+                players_serialized[id] = serialized_player
+
+        rounds_serialized = []
+        if len(self.rounds) > 0:
+            for round in self.rounds:
+                new_round = Round()
+                new_round.name = round.name
+                new_round.start_time = round.start_time
+                new_round.end_time = round.end_time
+
+                for match in round.match:
+                    serialized_match = match.serialize_match()
+
+                    new_round.match.append(serialized_match)
+
+                serialized_round = new_round.serialize_round()
+                rounds_serialized.append(serialized_round)
+
+        tournament_to_serialize = Tournament()
+        tournament_to_serialize.name = self.name
+        tournament_to_serialize.place = self.place
+        tournament_to_serialize.date = self.date
+        tournament_to_serialize.number_of_rounds = self.number_of_rounds
+        tournament_to_serialize.number_of_players = self.number_of_players
+        tournament_to_serialize.rounds = rounds_serialized
+        tournament_to_serialize.players = players_serialized
+        tournament_to_serialize.time_control = self.time_control
+        tournament_to_serialize.description = self.description
+
+        return tournament_to_serialize

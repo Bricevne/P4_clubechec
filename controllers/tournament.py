@@ -414,18 +414,6 @@ class TournamentManager:
         )
         return tournament_id
 
-    def update_tournament(
-        self, db_tournament: object, tournament: object, tournament_id: int
-    ) -> None:
-        """Update an existing tournament in the database.
-
-        Args:
-            application (object): Controller application instance
-            tournament (object): Tournament instance
-            tournament_id (int): Tournament id
-        """
-        db_tournament.update_tournament_db(tournament, tournament_id)
-
     def update_db(self, db_tournament: object) -> None:
         """Serialize players, rounds and matches in a new tournament instance, and update it in the database.
 
@@ -435,41 +423,8 @@ class TournamentManager:
         tournament_id = self.get_tournament_db_id(
             db_tournament, self.tournament.description
         )
-
-        players_serialized = {}
-        if len(self.tournament.players) > 0:
-            for id, player in self.tournament.players.items():
-                serialized_player = player.serialize_player_tournament()
-                players_serialized[id] = serialized_player
-
-        rounds_serialized = []
-        if len(self.tournament.rounds) > 0:
-            for round in self.tournament.rounds:
-                new_round = Round()
-                new_round.name = round.name
-                new_round.start_time = round.start_time
-                new_round.end_time = round.end_time
-
-                for match in round.match:
-                    serialized_match = match.serialize_match()
-
-                    new_round.match.append(serialized_match)
-
-                serialized_round = new_round.serialize_round()
-                rounds_serialized.append(serialized_round)
-
-        tournament_to_serialize = Tournament()
-        tournament_to_serialize.name = self.tournament.name
-        tournament_to_serialize.place = self.tournament.place
-        tournament_to_serialize.date = self.tournament.date
-        tournament_to_serialize.number_of_rounds = self.tournament.number_of_rounds
-        tournament_to_serialize.number_of_players = self.tournament.number_of_players
-        tournament_to_serialize.rounds = rounds_serialized
-        tournament_to_serialize.players = players_serialized
-        tournament_to_serialize.time_control = self.tournament.time_control
-        tournament_to_serialize.description = self.tournament.description
-
-        self.update_tournament(db_tournament, tournament_to_serialize, tournament_id)
+        tournament_to_serialize = self.tournament.serialize_tournament_attributes()
+        db_tournament.update_tournament_db(tournament_to_serialize, tournament_id)
 
     def display_rounds(self) -> None:
         """Display all the rounds done in the tournament."""

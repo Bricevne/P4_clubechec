@@ -8,6 +8,11 @@ class UserView:
         """Initialize class."""
         pass
 
+    def display_welcome(self) -> None:
+        """Print a message welcoming the user."""
+        message = "Welcome to the event! Please choose an option."
+        print(message)
+
     def get_name(self) -> str:
         """Return name message.
 
