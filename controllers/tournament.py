@@ -94,7 +94,7 @@ class TournamentManager:
             self.get_tournament_information()
             return True
 
-    def get_participating_players(self, available_players: dict) -> None:
+    def get_participating_players(self, available_players: dict, db_tournament) -> None:
         """Get the participants in a tournament instance if enough players are in the database.
 
         Args:
@@ -128,6 +128,7 @@ class TournamentManager:
                         system("clear")
                         print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
+            self.update_db(db_tournament)
 
     def get_round_numbers(self, db_tournament) -> None:
         """Get the tournament's number of rounds."""
@@ -161,10 +162,10 @@ class TournamentManager:
             self.update_db(db_tournament)
 
     def get_player_name_surname(self, player: object):
-        """_summary_
+        """Get a player in the format "name surname".
 
         Args:
-            player (object): _description_
+            player (object): A player instance
         """
         return player.name + " " + player.surname
 
@@ -181,8 +182,9 @@ class TournamentManager:
             print(f"Match {match_counter} : {first_player}  -  {second_player}")
             match_counter += 1
 
-    def start_new_round(self) -> None:
+    def start_new_round(self, db_tournament) -> None:
         """Start a new round."""
+        system("clear")
         new_round = Round()
         new_round.set_starting_time()
         self.get_round_name(new_round)
@@ -216,6 +218,8 @@ class TournamentManager:
 
         new_round.set_ending_time()
         self.tournament.add_round(new_round)
+        self.update_db(db_tournament)
+        self.update_ranking()
 
     @dash(40)
     def start_new_match(
@@ -323,20 +327,15 @@ class TournamentManager:
                 self.menu_manager.menu_view.get_round_options,
             )
             if round_option == 1:
-                system("clear")
-                self.start_new_round()
-                self.update_db(db_tournament)
-                self.update_ranking()
-
+                self.start_new_round(db_tournament)
             elif round_option == 2:
-                system("clear")
-                self.update_ranking()
                 self.display_by_rank()
             elif round_option == 3:
-                return False
-        self.tournament_view.display_message_end_tournament()
-        self.display_by_rank()
-        return True
+                round_running = False
+
+        if round_running is True:
+            self.tournament_view.display_message_end_tournament()
+            self.display_by_rank()
 
     def get_all_players(self, player_db: object) -> dict:
         """Return all players in the database.
@@ -379,27 +378,24 @@ class TournamentManager:
         while tournament_running:
 
             if len(self.tournament.players) != 0:
-                tournament_option = 1
+                self.start_tournament(db_tournament)
+                tournament_running = False
             else:
                 tournament_option = self.menu_manager.select_menu_option(
                     4,
                     self.menu_manager.menu_view.get_tournament_options,
                 )
 
-            if tournament_option == 1:
-                if len(self.tournament.players) == 0:
-                    self.get_participating_players(players)
-                    self.update_db(db_tournament)
-                else:
+                if tournament_option == 1:
+                    self.get_participating_players(players, db_tournament)
                     self.start_tournament(db_tournament)
                     tournament_running = False
-
-            elif tournament_option == 2:
-                self.get_round_numbers(db_tournament)
-            elif tournament_option == 3:
-                self.get_player_numbers(db_tournament)
-            elif tournament_option == 4:
-                tournament_running = False
+                elif tournament_option == 2:
+                    self.get_round_numbers(db_tournament)
+                elif tournament_option == 3:
+                    self.get_player_numbers(db_tournament)
+                elif tournament_option == 4:
+                    tournament_running = False
 
     def get_tournament_db_id(
         self, db_tournament: object, tournament_description: str

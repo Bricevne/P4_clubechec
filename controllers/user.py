@@ -377,7 +377,6 @@ class UserManager:
 
     def display_imported_tournament(self):
         """Import a tournament, create a new tournament instance and display its information."""
-
         found_tournament = self.import_tournament(
             self.db_tournament, self.menu_manager.menu_view.get_import_menu
         )
