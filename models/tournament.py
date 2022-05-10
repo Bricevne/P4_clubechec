@@ -119,11 +119,11 @@ class Tournament:
         """
         return sorted(self.players.items(), key=lambda player: player[1].surname)
 
-    def sort_by_surname_dict(self) -> tuple:
+    def sort_by_surname_dict(self) -> dict:
         """Sort players instances by surname.
 
         Returns:
-            tuple: A tuple containing tuples of a player's id and player instance sorted by elo
+            dict: a dictionnary of id and player instances "sorted" by surname
         """
         sorted_players = {k: v for k, v in self.sort_by_surname_list()}
         return sorted_players

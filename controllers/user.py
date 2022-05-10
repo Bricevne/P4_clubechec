@@ -326,7 +326,6 @@ class UserManager:
             print("Tournament does not exist.")
 
     def display_tournament_information(self, get_menu: Callable) -> None:
-        # MOVE TO TOURNAMENT CONTROLLER
         """
         Dispatch the action selected by the user.
 
@@ -343,16 +342,12 @@ class UserManager:
 
             if user_choice == 1:
                 self.tournament_manager.display_by_rank()
-
             if user_choice == 2:
                 self.tournament_manager.display_by_surname()
-
             elif user_choice == 3:
                 self.tournament_manager.display_rounds()
-
             elif user_choice == 4:
                 self.tournament_manager.display_matches()
-
             elif user_choice == 5:
                 system("clear")
                 menu_running = False

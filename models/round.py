@@ -29,13 +29,13 @@ class Round:
         """Set the round's ending time."""
         self.end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    def add_match(self, match: object) -> None:
+    def add_match(self, match_to_add: object) -> None:
         """Add a match to the round.
 
         Args:
             match (object): A match instance
         """
-        self.match.append(match)
+        self.match.append(match_to_add)
 
     def serialize_round(self) -> dict:
         """Serialize a round for the list of tournaments in the database.
