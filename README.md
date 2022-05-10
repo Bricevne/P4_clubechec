@@ -7,6 +7,8 @@ It must be able to manage tournaments, players, matchs, rounds and summurize the
 
 Clone the repository on your computer.
 
+`git clone https://github.com/Bricevne/P4_clubechec.git` 
+
 Set your virtual environment under python 3.10
 
 Create the virtual environment and install the dependencies:
