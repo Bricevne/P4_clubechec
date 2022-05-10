@@ -126,33 +126,20 @@ class UserManager:
             return player
 
     def display_players_by_elo(self) -> None:
-        """Display all players in the database by increasing elo.
-
-        Args:
-            db_player (object): Player database instance
-        """
+        """Display all players in the database by increasing elo."""
         players = self.db_player.sort_players_by_elo()
         for player in players:
             self.user_view.display_sorted_players(player)
 
     def display_players_by_surname(self) -> None:
-        """Display all players in the database by surname.
-
-        Args:
-            db_player (object): Player database instance
-        """
+        """Display all players in the database by surname."""
         players = self.db_player.sort_players_by_surname()
         for player in players:
             self.user_view.display_sorted_players(player)
 
     def display_players(self) -> None:
-        """Dispatch the action requested by the user.
-
-        Args:
-            player_db (object): Player database instance
-        """
+        """Dispatch the action requested by the user."""
         system("clear")
-
         user_choice = 0
         menu_running = True
 
@@ -204,34 +191,10 @@ class UserManager:
                 system("clear")
                 self.user_view.display_unsuccessful_change()
 
-    def get_all_players(self, player_db: object) -> dict:
-        """Return all players in the database.
-
-        Args:
-            player_db (object): Player database instance
-
-        Returns:
-            dict: Dictionnary {id : player instance}
-        """
-        available_players = {}
-        for player_found in player_db.players:
-            player = Player(
-                player_found["name"],
-                player_found["surname"],
-                player_found["birthdate"],
-                player_found["gender"],
-                player_found["elo"],
-            )
-            available_players[player_found.doc_id] = player
-        return available_players
-
-    def import_tournament(
-        self, tournament_db: object, get_menu: Callable
-    ) -> dict or None:
+    def import_tournament(self, get_menu: Callable) -> dict or None:
         """Dispatch the action selected by the user (recover a tournament, or go back to previous menu).
 
         Args:
-            tournament_db (object): Tournament database instance
             get_menu (Callable): Function displaying menu
 
         Returns:
@@ -241,23 +204,20 @@ class UserManager:
         menu_running = True
 
         while menu_running:
-            for tournament in tournament_db.tournaments:
+            for tournament in self.db_tournament.tournaments:
                 self.user_view.display_tournaments(tournament)
 
             user_choice = self.menu_manager.select_menu_option(2, get_menu)
 
             if user_choice == 1:
-                tournament = self.recover_tournament(tournament_db)
+                tournament = self.recover_tournament(self.db_tournament)
                 return tournament
             elif user_choice == 2:
                 system("clear")
                 menu_running = False
 
-    def recover_tournament(self, db_tournament: object) -> dict or None:
+    def recover_tournament(self) -> dict or None:
         """Recover a tournament from the database by unserializing it.
-
-        Args:
-            db_tournament (object): Tournament database instance
 
         Returns:
             Dict or None: Dictionnary of a tournament, none otherwise
@@ -267,14 +227,14 @@ class UserManager:
         except ValueError:
             self.user_view.display_wrong_id_type()
         else:
-            tournament_found = db_tournament.search_tournament_by_id(tournament_id)
+            tournament_found = self.db_tournament.search_tournament_by_id(tournament_id)
             return self.unserialize_tournament(tournament_found)
 
     def unserialize_tournament(self, tournament_found: dict) -> object or None:
         """Unserialize a tournament in the database.
 
         Args:
-            tournament_found (dict): A tournament
+            tournament_found (dict): Dictionnary of tournament's information
 
         Returns:
             object or None: A tournament instance if a tournament is found, none otherwise
@@ -329,7 +289,7 @@ class UserManager:
         """
         Dispatch the action selected by the user.
 
-        Options: isplay list of rounds, display list of matches, go back to previous menu.
+        Options: display list of rounds, display list of matches, go back to previous menu.
 
         Args:
             get_menu (Callable): Function displaying menu

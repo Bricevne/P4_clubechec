@@ -23,7 +23,11 @@ class TournamentManager:
 
     @staticmethod
     def dash(n):
-        """Class decorator."""
+        """Class decorator.
+
+        Args:
+            n (int): Number of repeated symbol
+        """
 
         def decorate(fn):
             def wrapper(*args, **kwargs):
@@ -94,11 +98,14 @@ class TournamentManager:
             self.get_tournament_information()
             return True
 
-    def get_participating_players(self, available_players: dict, db_tournament) -> None:
+    def get_participating_players(
+        self, available_players: dict, db_tournament: object
+    ) -> None:
         """Get the participants in a tournament instance if enough players are in the database.
 
         Args:
             available_players (dict): Dictionnary of available players in the database
+            db_tournament (object): DbTournament instance
         """
         if len(available_players) < self.tournament.number_of_players:
             self.tournament_view.get_wrong_player_number(
@@ -130,8 +137,12 @@ class TournamentManager:
             self.tournament.select_players(selected_players)
             self.update_db(db_tournament)
 
-    def get_round_numbers(self, db_tournament) -> None:
-        """Get the tournament's number of rounds."""
+    def get_round_numbers(self, db_tournament: object) -> None:
+        """Get the tournament's number of rounds.
+
+        Args:
+            db_tournament (object): DbTournament instance
+        """
         system("clear")
         try:
             number_of_rounds = int(input(self.tournament_view.get_view_round()))
@@ -150,8 +161,12 @@ class TournamentManager:
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
 
-    def get_player_numbers(self, db_tournament) -> None:
-        """Get the tournament's number of players."""
+    def get_player_numbers(self, db_tournament: object) -> None:
+        """Get the tournament's number of players.
+
+        Args:
+            db_tournament (object): DbTournament instance
+        """
         system("clear")
         try:
             number_of_players = int(input(self.tournament_view.get_view_players()))
@@ -161,11 +176,14 @@ class TournamentManager:
             self.tournament.set_number_of_players(number_of_players)
             self.update_db(db_tournament)
 
-    def get_player_name_surname(self, player: object):
+    def get_player_name_surname(self, player: object) -> str:
         """Get a player in the format "name surname".
 
         Args:
             player (object): A player instance
+
+        Returns:
+            str: Player display format
         """
         return player.name + " " + player.surname
 
@@ -182,8 +200,12 @@ class TournamentManager:
             print(f"Match {match_counter} : {first_player}  -  {second_player}")
             match_counter += 1
 
-    def start_new_round(self, db_tournament) -> None:
-        """Start a new round."""
+    def start_new_round(self, db_tournament: object) -> None:
+        """Start a new round.
+
+        Args:
+            db_tournament (object): DbTournament instance
+        """
         system("clear")
         new_round = Round()
         new_round.set_starting_time()
@@ -312,7 +334,7 @@ class TournamentManager:
         """Start tournament.
 
         Args:
-            application (object): Controller Application instance
+            db_tournament (object): DbTournament instance
 
         Returns:
             bool: True if the tournament is over, False if stopped before the end
@@ -363,7 +385,7 @@ class TournamentManager:
         """Create a new tournament.
 
         Args:
-            application (object): Controller application instance
+            db_tournament (object): DbTournament instance
         """
         tournament_running = True
         players = self.get_all_players(db_player)
@@ -403,7 +425,7 @@ class TournamentManager:
         """Recover the tournament's id thanks to its description in the database.
 
                 Args:
-            application (object): Controller application instance
+            db_tournament (object): DbTournament instance
             tournament_description (str): Tounrnament's description
 
         Returns:
@@ -418,7 +440,7 @@ class TournamentManager:
         """Serialize players, rounds and matches in a new tournament instance, and update it in the database.
 
         Args:
-            application (object): Controller application instance
+            db_tournament (object): DbTournament instance
         """
         tournament_id = self.get_tournament_db_id(
             db_tournament, self.tournament.description
