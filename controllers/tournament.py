@@ -129,14 +129,16 @@ class TournamentManager:
                         print(self.tournament_view.get_wrong_id())
             self.tournament.select_players(selected_players)
 
-    def get_round_numbers(self) -> None:
+    def get_round_numbers(self, db_tournament) -> None:
         """Get the tournament's number of rounds."""
+        system("clear")
         try:
             number_of_rounds = int(input(self.tournament_view.get_view_round()))
         except ValueError:
             self.tournament_view.get_wrong_option()
         else:
             self.tournament.set_round(number_of_rounds)
+            self.update_db(db_tournament)
 
     def get_round_name(self, round_object: object) -> None:
         """Get the new round's name.
@@ -147,14 +149,24 @@ class TournamentManager:
         name = input(self.tournament_view.get_view_round_name())
         round_object.set_round_name(name)
 
-    def get_player_numbers(self) -> None:
+    def get_player_numbers(self, db_tournament) -> None:
         """Get the tournament's number of players."""
+        system("clear")
         try:
             number_of_players = int(input(self.tournament_view.get_view_players()))
         except ValueError:
             self.tournament_view.get_wrong_option()
         else:
             self.tournament.set_number_of_players(number_of_players)
+            self.update_db(db_tournament)
+
+    def get_player_name_surname(self, player: object):
+        """_summary_
+
+        Args:
+            player (object): _description_
+        """
+        return player.name + " " + player.surname
 
     def get_players_matches(self, matches: list[tuple]) -> None:
         """Display all the matches that will occur during the round.
@@ -164,8 +176,8 @@ class TournamentManager:
         """
         match_counter = 1
         for match in matches:
-            first_player = match[0][1].name + " " + match[0][1].surname
-            second_player = match[1][1].name + " " + match[1][1].surname
+            first_player = self.get_player_name_surname(match[0][1])
+            second_player = self.get_player_name_surname(match[1][1])
             print(f"Match {match_counter} : {first_player}  -  {second_player}")
             match_counter += 1
 
@@ -182,17 +194,12 @@ class TournamentManager:
         while match_counter < len(player_pairs):
             first_player_id = player_pairs[match_counter][0][0]
             first_player = (
-                player_pairs[match_counter][0][1].name
-                + " "
-                + player_pairs[match_counter][0][1].surname
-                + " : "
+                self.get_player_name_surname(player_pairs[match_counter][0][1]) + " : "
             )
+
             second_player_id = player_pairs[match_counter][1][0]
             second_player = (
-                player_pairs[match_counter][1][1].name
-                + " "
-                + player_pairs[match_counter][1][1].surname
-                + " : "
+                self.get_player_name_surname(player_pairs[match_counter][1][1]) + " : "
             )
             results = self.start_new_match(match_counter, first_player, second_player)
             match_result = Match(
@@ -378,6 +385,7 @@ class TournamentManager:
                     4,
                     self.menu_manager.menu_view.get_tournament_options,
                 )
+
             if tournament_option == 1:
                 if len(self.tournament.players) == 0:
                     self.get_participating_players(players)
@@ -387,13 +395,9 @@ class TournamentManager:
                     tournament_running = False
 
             elif tournament_option == 2:
-                system("clear")
-                self.get_round_numbers()
-                self.update_db(db_tournament)
+                self.get_round_numbers(db_tournament)
             elif tournament_option == 3:
-                system("clear")
-                self.get_player_numbers()
-                self.update_db(db_tournament)
+                self.get_player_numbers(db_tournament)
             elif tournament_option == 4:
                 tournament_running = False
 
@@ -438,14 +442,18 @@ class TournamentManager:
         for round in self.tournament.rounds:
             print(f"\n{round.name}")
             for match in round.match:
-                first_player = self.tournament.players[str(match.players_score[0][0])]
-                second_player = self.tournament.players[str(match.players_score[1][0])]
+                first_player = self.get_player_name_surname(
+                    self.tournament.players[str(match.players_score[0][0])]
+                )
+                second_player = self.get_player_name_surname(
+                    self.tournament.players[str(match.players_score[1][0])]
+                )
                 first_player_score = match.players_score[0][1]
                 second_player_score = match.players_score[1][1]
 
                 print(
-                    f"{first_player.name} {first_player.surname} : {first_player_score} - {second_player_score} : "
-                    f"{second_player.name} {second_player.surname}"
+                    f"{first_player} : {first_player_score} - "
+                    f"{second_player_score} : {second_player}"
                 )
 
     def display_by_surname(self) -> None:

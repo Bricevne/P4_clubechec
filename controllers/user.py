@@ -105,13 +105,12 @@ class UserManager:
         else:
             return False
 
-    def add_player(self) -> object or None:
+    def create_player(self) -> object or None:
         """Create a player instance.
 
         Returns:
             object or None: Player instance if the user confirms, None otherwise
         """
-        system("clear")
         name = input(self.user_view.get_name()).capitalize()
         surname = input(self.user_view.get_surname()).capitalize()
         birthdate = self.get_good_birthdate()
@@ -126,32 +125,34 @@ class UserManager:
             self.user_view.display_player_confirmation()
             return player
 
-    def display_players_by_elo(self, db_player: object) -> None:
+    def display_players_by_elo(self) -> None:
         """Display all players in the database by increasing elo.
 
         Args:
             db_player (object): Player database instance
         """
-        players = db_player.sort_players_by_elo()
+        players = self.db_player.sort_players_by_elo()
         for player in players:
             self.user_view.display_sorted_players(player)
 
-    def display_players_by_surname(self, db_player: object) -> None:
+    def display_players_by_surname(self) -> None:
         """Display all players in the database by surname.
 
         Args:
             db_player (object): Player database instance
         """
-        players = db_player.sort_players_by_surname()
+        players = self.db_player.sort_players_by_surname()
         for player in players:
             self.user_view.display_sorted_players(player)
 
-    def display_players(self, player_db: object) -> None:
+    def display_players(self) -> None:
         """Dispatch the action requested by the user.
 
         Args:
             player_db (object): Player database instance
         """
+        system("clear")
+
         user_choice = 0
         menu_running = True
 
@@ -161,25 +162,22 @@ class UserManager:
             )
 
             if user_choice == 1:
-
-                self.update_players_elo(player_db)
+                self.update_players_elo()
             elif user_choice == 2:
                 system("clear")
-                self.display_players_by_surname(player_db)
+                self.display_players_by_surname()
             elif user_choice == 3:
                 system("clear")
-                self.display_players_by_elo(player_db)
+                self.display_players_by_elo()
             elif user_choice == 4:
                 system("clear")
                 menu_running = False
 
-    def update_players_elo(self, db_player: object) -> None:
+    def update_players_elo(self) -> None:
         """Update a player's elo by picking his id.
 
-            Unserialize a player dictionnary in the database to modify its elo.
-            Display a successful or unsuccessful change.
-        Args:
-            db_player (object): Player database instance
+        Unserialize a player dictionnary in the database to modify its elo.
+        Display a successful or unsuccessful change.
         """
         try:
             player_id = int(input(self.user_view.get_player_by_id()))
@@ -187,7 +185,7 @@ class UserManager:
             system("clear")
             self.user_view.display_wrong_id_type()
         else:
-            player_found = db_player.search_player_by_id(player_id)
+            player_found = self.db_player.search_player_by_id(player_id)
             if player_found:
                 player = Player(
                     player_found["name"],
@@ -199,7 +197,7 @@ class UserManager:
 
                 elo = int(input(self.user_view.get_new_elo()))
                 player.elo = elo
-                db_player.update_player(player, player_id)
+                self.db_player.update_player(player, player_id)
                 system("clear")
                 self.user_view.display_successful_change()
             else:
@@ -325,7 +323,7 @@ class UserManager:
                 tournament.rounds = tournament_rounds
             return tournament
         else:
-            print("not found")
+            print("Tournament does not exist.")
 
     def display_tournament_information(self, get_menu: Callable) -> None:
         # MOVE TO TOURNAMENT CONTROLLER
@@ -359,6 +357,36 @@ class UserManager:
                 system("clear")
                 menu_running = False
 
+    def add_player(self) -> None:
+        """Create a new player instance and add it to the database."""
+        system("clear")
+        added_player = self.create_player()
+        if added_player is not None:
+            self.db_player.add_player_db(added_player)
+
+    def start_imported_tournament(self):
+        """Import a tournament, create a new tournament instance from those information and continue the tournament."""
+        imported_tournament = self.import_tournament(
+            self.db_tournament, self.menu_manager.menu_view.get_import_menu
+        )
+        if imported_tournament:
+            self.tournament_manager.tournament = imported_tournament
+            self.tournament_manager.create_tournament(
+                self.db_player, self.db_tournament
+            )
+
+    def display_imported_tournament(self):
+        """Import a tournament, create a new tournament instance and display its information."""
+
+        found_tournament = self.import_tournament(
+            self.db_tournament, self.menu_manager.menu_view.get_import_menu
+        )
+        if found_tournament:
+            self.tournament_manager.tournament = found_tournament
+            self.display_tournament_information(
+                self.menu_manager.menu_view.get_tournament_information_menu,
+            )
+
     def start_program(self) -> None:
         """Start program.
 
@@ -366,48 +394,26 @@ class UserManager:
             application (object): Application controller instance
         """
         system("clear")
+
         self.user_view.display_welcome()
+
         running = True
         while running:
             self.tournament_manager.tournament = Tournament()
             user_choice = self.menu_manager.select_menu_option(
                 6, self.menu_manager.menu_view.get_menu
             )
-
             if user_choice == 1:
                 self.tournament_manager.create_tournament(
                     self.db_player, self.db_tournament
                 )
             elif user_choice == 2:
-                added_player = self.add_player()
-                if added_player is not None:
-                    self.db_player.add_player_db(added_player)
-
+                self.add_player()
             elif user_choice == 3:
-                system("clear")
-                player_db = self.db_player
-                self.display_players(player_db)
-
+                self.display_players()
             elif user_choice == 4:
-                tournament_db = self.db_tournament
-                imported_tournament = self.import_tournament(
-                    tournament_db, self.menu_manager.menu_view.get_import_menu
-                )
-                if imported_tournament:
-                    self.tournament_manager.tournament = imported_tournament
-                    self.tournament_manager.create_tournament(
-                        self.db_player, self.db_tournament
-                    )
-
+                self.start_imported_tournament()
             elif user_choice == 5:
-                tournament_db = self.db_tournament
-                found_tournament = self.import_tournament(
-                    tournament_db, self.menu_manager.menu_view.get_import_menu
-                )
-                if found_tournament:
-                    self.tournament_manager.tournament = found_tournament
-                    self.display_tournament_information(
-                        self.menu_manager.menu_view.get_tournament_information_menu,
-                    )
+                self.display_imported_tournament()
             elif user_choice == 6:
                 running = False
