@@ -169,14 +169,83 @@ class Tournament:
         else:
             sorted_players = self.sort_by_score_list()
 
+            players_chosen = []
             matches = []
-            for number in range(0, len(sorted_players), 2):
-                new_match = (
-                    sorted_players[number],
-                    sorted_players[number + 1],
-                )
-                matches.append(new_match)
+            for number in range(0, len(sorted_players) - 1):
+
+                if number not in players_chosen:
+
+                    first_player = sorted_players[number]
+
+                    second_player_count = number + 1
+                    second_player = sorted_players[second_player_count]
+
+                    while (
+                        self.pair_exists(first_player, second_player)
+                        or second_player_count in players_chosen
+                    ):
+                        second_player_count += 1
+                        try:
+                            second_player = sorted_players[second_player_count]
+                        except IndexError:
+
+                            second_player_count = self.get_next_available(
+                                players_chosen, number
+                            )
+                            break
+
+                    players_chosen.append(number)
+                    players_chosen.append(second_player_count)
+
+                    new_match = (
+                        sorted_players[number],
+                        sorted_players[second_player_count],
+                    )
+                    matches.append(new_match)
             return matches
+
+    def pair_exists(self, first_player: tuple, second_player: tuple) -> bool:
+        """Check if a match has already occured.
+
+        Args:
+            first_player (tuple): Tuple for the first player (id, player instance)
+            second_player (tuple): Tuple for the second player (id, player instance)
+
+        Returns:
+            bool: True if a match exists, False otherwise
+        """
+        first_player_id = first_player[0]
+        second_player_id = second_player[0]
+        for round in self.rounds:
+            for match in round.match:
+                if (
+                    match.players_score[0][0] == first_player_id
+                    and match.players_score[1][0] == second_player_id
+                ) or (
+                    match.players_score[0][0] == second_player_id
+                    and match.players_score[1][0] == first_player_id
+                ):
+                    return True
+        return False
+
+    def get_next_available(
+        self, players__already_chosen: list, first_player_number: int
+    ) -> int:
+        """Get the next player who has not been picked yet.
+
+        Method called when no other match is possible for the first player.
+
+        Args:
+            players__already_chosen (list): list of player positions already picked
+            first_player_number (int): position of the first player to be next added to the picked players
+
+        Returns:
+            int: Position of the second player picked
+        """
+        second_player_number = first_player_number + 1
+        while second_player_number in players__already_chosen:
+            second_player_number += 1
+        return second_player_number
 
     def serialize_tournament(self) -> dict:
         """Serialize a tournament for the database when ites attributes don't contain objects.
