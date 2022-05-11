@@ -149,8 +149,11 @@ class TournamentManager:
         except ValueError:
             self.tournament_view.get_wrong_option()
         else:
-            self.tournament.set_round(number_of_rounds)
-            self.update_db(db_tournament)
+            if number_of_rounds >= self.tournament.number_of_players:
+                self.tournament_view.display_round_superior_to_players()
+            else:
+                self.tournament.set_round(number_of_rounds)
+                self.update_db(db_tournament)
 
     def get_round_name(self, round_object: object) -> None:
         """Get the new round's name.
@@ -206,7 +209,6 @@ class TournamentManager:
         Args:
             db_tournament (object): DbTournament instance
         """
-        system("clear")
         new_round = Round()
         new_round.set_starting_time()
         self.get_round_name(new_round)
