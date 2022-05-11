@@ -131,7 +131,17 @@ class TournamentView:
         message = "The tournament ended ! The final ranking is: "
         print(message)
 
-    def display_round_superior_to_players(self) -> None:
+    def display_rounds_superior_to_players(self) -> None:
         """Print a message when the number of rounds is superior or equal to the number of players."""
         message = "The number of rounds must be inferior to the number of players."
+        print(message)
+
+    def display_players_inferior_to_rounds(self) -> None:
+        """Print a message when the number of players is inferior or equal to the number of rounds."""
+        message = "The number of players must be superior to the number of rounds."
+        print(message)
+
+    def display_players_not_even(self) -> None:
+        """Print a message when the number of players is not even."""
+        message = "The number of players must be even for a tournament."
         print(message)

@@ -150,7 +150,7 @@ class TournamentManager:
             self.tournament_view.get_wrong_option()
         else:
             if number_of_rounds >= self.tournament.number_of_players:
-                self.tournament_view.display_round_superior_to_players()
+                self.tournament_view.display_rounds_superior_to_players()
             else:
                 self.tournament.set_round(number_of_rounds)
                 self.update_db(db_tournament)
@@ -176,8 +176,13 @@ class TournamentManager:
         except ValueError:
             self.tournament_view.get_wrong_option()
         else:
-            self.tournament.set_number_of_players(number_of_players)
-            self.update_db(db_tournament)
+            if number_of_players <= self.tournament.number_of_rounds:
+                self.tournament_view.display_players_inferior_to_rounds()
+            elif number_of_players % 2 == 1:
+                self.tournament_view.display_players_not_even()
+            else:
+                self.tournament.set_number_of_players(number_of_players)
+                self.update_db(db_tournament)
 
     def get_player_name_surname(self, player: object) -> str:
         """Get a player in the format "name surname".

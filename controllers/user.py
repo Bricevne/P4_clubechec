@@ -72,7 +72,7 @@ class UserManager:
         regex = r"(^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$)"
         not_right = True
         while not_right:
-            birthdate = input(self.user_view.get_birthdate())
+            birthdate = str(input(self.user_view.get_birthdate()).encode("utf-8"))
             if re.search(regex, birthdate):
                 not_right = False
                 return birthdate
