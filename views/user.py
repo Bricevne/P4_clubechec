@@ -84,8 +84,8 @@ class UserView:
             player (dict): Dictionnary of a player's information
         """
         print(
-            f"id: {player.doc_id}   player: {player['name']} {player['surname']}   "
-            f"gender: {player['gender']}   elo: {player['elo']}"
+            f"id: {player.doc_id}     player: {player['name']} {player['surname']}     "
+            f"gender: {player['gender']}     birthdate: {player['birthdate']}     elo: {player['elo']}"
         )
 
     def get_player_by_id(self) -> str:
