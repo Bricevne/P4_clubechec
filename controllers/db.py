@@ -21,7 +21,6 @@ class DbPlayer:
         Args:
             player (object): Player instance
         """
-
         self.players.insert(player.serialize_player())
 
     def search_player_by_id(self, player_id: int) -> dict:

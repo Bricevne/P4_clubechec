@@ -421,7 +421,7 @@ class TournamentManager:
 
     def get_tournament_db_id(
         self, db_tournament: object, tournament_description: str
-    ) -> int or bool:
+    ) -> int or None:
         """Recover the tournament's id thanks to its description in the database.
 
                 Args:
@@ -429,7 +429,7 @@ class TournamentManager:
             tournament_description (str): Tounrnament's description
 
         Returns:
-            int or bool: Tournament id if found, False if not
+            int or None: Tournament id if found, None if not
         """
         tournament_id = db_tournament.search_tournament_id_by_description(
             tournament_description

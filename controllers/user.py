@@ -210,7 +210,7 @@ class UserManager:
             user_choice = self.menu_manager.select_menu_option(2, get_menu)
 
             if user_choice == 1:
-                tournament = self.recover_tournament(self.db_tournament)
+                tournament = self.recover_tournament()
                 return tournament
             elif user_choice == 2:
                 system("clear")
@@ -322,7 +322,7 @@ class UserManager:
     def start_imported_tournament(self):
         """Import a tournament, create a new tournament instance from those information and continue the tournament."""
         imported_tournament = self.import_tournament(
-            self.db_tournament, self.menu_manager.menu_view.get_import_menu
+            self.menu_manager.menu_view.get_import_menu
         )
         if imported_tournament:
             self.tournament_manager.tournament = imported_tournament
@@ -333,7 +333,7 @@ class UserManager:
     def display_imported_tournament(self):
         """Import a tournament, create a new tournament instance and display its information."""
         found_tournament = self.import_tournament(
-            self.db_tournament, self.menu_manager.menu_view.get_import_menu
+            self.menu_manager.menu_view.get_import_menu
         )
         if found_tournament:
             self.tournament_manager.tournament = found_tournament
