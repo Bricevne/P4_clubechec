@@ -53,6 +53,14 @@ class UserView:
         """
         return "Elo: "
 
+    def get_wrong_option(self) -> None:
+        """Return an error message.
+
+        Returns:
+            str: Wrong option chosen
+        """
+        print("This is not an available option.")
+
     def get_wrong_elo(self) -> None:
         """Print a message when the elo is wrong."""
         print("Elo must be an integer.")
@@ -128,7 +136,7 @@ class UserView:
             tournament (dict): Dictionnary of a tournament's information
         """
         print(
-            f"id: {tournament.doc_id}   name: {tournament['name']}  place: {tournament['place']}   "
+            f"id: {tournament.doc_id}       name: {tournament['name']}       place: {tournament['place']}       "
             f"description: {tournament['description']}"
         )
 
