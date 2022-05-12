@@ -128,7 +128,7 @@ class TournamentView:
 
     def display_message_end_tournament(self) -> None:
         """Print a message when the tournament ends."""
-        message = "The tournament ended ! The final ranking is: "
+        message = "\nThe tournament ended !"
         print(message)
 
     def display_rounds_superior_to_players(self) -> None:
