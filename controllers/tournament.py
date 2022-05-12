@@ -363,8 +363,8 @@ class TournamentManager:
                 round_running = False
 
         if round_running is True:
-            self.tournament_view.display_message_end_tournament()
             self.display_by_rank()
+            self.tournament_view.display_message_end_tournament()
 
     def get_all_players(self, player_db: object) -> dict:
         """Return all players in the database.
