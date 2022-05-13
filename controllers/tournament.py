@@ -357,7 +357,7 @@ class TournamentManager:
             self.display_by_rank()
             self.tournament_view.display_message_end_tournament()
 
-    def get_all_players(self, player_db: object) -> dict:
+    def get_all_players_from_db(self, player_db: object) -> dict:
         """Return all players in the database.
 
         Args:
@@ -386,7 +386,7 @@ class TournamentManager:
             db_tournament (object): DbTournament instance
         """
         tournament_running = True
-        players = self.get_all_players(db_player)
+        players = self.get_all_players_from_db(db_player)
 
         # If there is already a time_control defined, tournament's information has already been set.
         if self.tournament.time_control == "":
