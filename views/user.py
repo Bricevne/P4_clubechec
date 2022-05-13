@@ -148,3 +148,8 @@ class UserView:
         """
         message = "Select the tournament's id: "
         return message
+
+    def get_nonexistent_tournament(self) -> None:
+        """Print a message when a tournament does not exist."""
+        message = "Tournament does not exist."
+        print(message)

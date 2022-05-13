@@ -83,12 +83,8 @@ class TournamentView:
         return "Please select a player's id to add him to the tournament : "
 
     def get_wrong_id(self) -> str:
-        """Return a message when a player is already selected or does not exist.
-
-        Returns:
-            str: Unvalid id message
-        """
-        return "Please choose a valid id from the list. "
+        """Return a message when a player is already selected or does not exist."""
+        print("Please choose a valid id from the list. ")
 
     def get_wrong_round_number(self) -> None:
         """Print an error message when the user picks a letter instead of a number."""
@@ -145,3 +141,54 @@ class TournamentView:
         """Print a message when the number of players is not even."""
         message = "The number of players must be even for a tournament."
         print(message)
+
+    def display_match_result_format(
+        self,
+        player_one: str,
+        player_two: str,
+        player_one_score: int,
+        player_two_score: int,
+    ) -> None:
+        """Display a match with its results in a tournament report."""
+        print(
+            f"{player_one} : {player_one_score} - " f"{player_two_score} : {player_two}"
+        )
+
+    def display_players_by_id(self, id: int, player: object) -> None:
+        """Display players by id for players selection at the beginning of a tournament.
+
+        Args:
+            id (int): Player id
+            player (object): Player instance
+        """
+        print(f"{id} : {player.name} {player.surname}")
+
+    def display_tournament_rounds(self, round: object) -> None:
+        """Display a tournament's rounds.
+
+        Args:
+            round (object): Round instance
+        """
+        print(
+            f"Name: {round.name}   Starting time: {round.start_time}   Ending time: {round.end_time}"
+        )
+
+    def display_next_matches(
+        self, counter: int, first_player: str, second_player: str
+    ) -> None:
+        """Display a match to be played in the next round.
+
+        Args:
+            counter (int): Counter of match
+            first_player (str): First player name surname
+            second_player (str): Second player name surname
+        """
+        print(f"Match {counter} : {first_player}  -  {second_player}")
+
+    def display_round_name(self, round: object) -> None:
+        """Display a round's name when displaying matches in a tournament report.
+
+        Args:
+            round (object):
+        """
+        print(f"\n{round.name}")

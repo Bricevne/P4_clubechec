@@ -284,7 +284,7 @@ class UserManager:
                 tournament.rounds = tournament_rounds
             return tournament
         else:
-            print("Tournament does not exist.")
+            self.user_view.get_nonexistent_tournament()
 
     def display_tournament_information(self, get_menu: Callable) -> None:
         """

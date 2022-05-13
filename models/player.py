@@ -73,3 +73,11 @@ class Player:
             "rank": self.rank,
         }
         return serialized_player
+
+    def get_player_name_surname(self) -> str:
+        """Get a player in the format "name surname".
+
+        Returns:
+            str: Player display format
+        """
+        return self.name + " " + self.surname
